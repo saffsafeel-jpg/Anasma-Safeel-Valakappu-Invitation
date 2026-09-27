@@ -1,5 +1,12 @@
 import React, { createContext, useContext, useState, useRef, useEffect, ReactNode } from 'react';
 
+declare global {
+  interface Window {
+    YT?: any;
+    onYouTubeIframeAPIReady?: () => void;
+  }
+}
+
 const YOUTUBE_VIDEO_ID = 'vSJN0JFF0yo';
 export const SONG_TITLE = 'Azhagu Kutti Chellam';
 export const SONG_ARTIST = 'Ved Shanker · Shakthisree Gopalan';
@@ -27,54 +34,136 @@ const MusicContext = createContext<MusicContextType | null>(null);
 
 export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolumeState] = useState(90);
   const [isMuted, setIsMuted] = useState(false);
   const [customAudioUrl, setCustomAudioUrl] = useState<string | null>(null);
   const [customFileName, setCustomFileName] = useState<string | null>(null);
 
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const ytPlayerRef = useRef<any>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const progressTimerRef = useRef<number | null>(null);
+  const pendingPlayRef = useRef(false);
 
-  // Send command to hidden YouTube iframe safely
-  const sendYouTubeCommand = (func: string, args: string | number = '') => {
-    if (iframeRef.current && iframeRef.current.contentWindow) {
+  // Initialize YouTube IFrame Player
+  useEffect(() => {
+    let checkInterval: number | null = null;
+
+    const initPlayer = () => {
+      if (!window.YT || !window.YT.Player) return false;
+      const targetEl = document.getElementById('valakappu-youtube-player-instance');
+      if (!targetEl) return false;
+
       try {
-        iframeRef.current.contentWindow.postMessage(
-          JSON.stringify({ event: 'command', func, args }),
-          '*'
-        );
-      } catch {
-        // safe postMessage
+        ytPlayerRef.current = new window.YT.Player('valakappu-youtube-player-instance', {
+          videoId: YOUTUBE_VIDEO_ID,
+          width: '280',
+          height: '160',
+          playerVars: {
+            autoplay: 0,
+            controls: 0,
+            disablekb: 1,
+            enablejsapi: 1,
+            fs: 0,
+            modestbranding: 1,
+            playsinline: 1,
+            rel: 0,
+            origin: typeof window !== 'undefined' ? window.location.origin : '',
+          },
+          events: {
+            onReady: (event: any) => {
+              ytPlayerRef.current = event.target;
+              if (pendingPlayRef.current) {
+                pendingPlayRef.current = false;
+                try {
+                  event.target.unMute();
+                  event.target.setVolume(volume);
+                  event.target.playVideo();
+                } catch {
+                  // ignore
+                }
+              }
+            },
+            onStateChange: (event: any) => {
+              // 1 = PLAYING, 2 = PAUSED, 0 = ENDED
+              if (event.data === 1) {
+                setIsPlaying(true);
+              } else if (event.data === 2 || event.data === 0) {
+                setIsPlaying(false);
+              }
+            },
+            onError: (err: any) => {
+              console.warn('YT Player notice:', err);
+            },
+          },
+        });
+        return true;
+      } catch (err) {
+        console.warn('Error creating YT player:', err);
+        return false;
       }
+    };
+
+    if (window.YT && window.YT.Player) {
+      initPlayer();
+    } else {
+      const prevCallback = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        if (typeof prevCallback === 'function') prevCallback();
+        initPlayer();
+      };
+
+      // Fallback check in case script loaded before callback assignment
+      checkInterval = window.setInterval(() => {
+        if (window.YT && window.YT.Player && !ytPlayerRef.current) {
+          if (initPlayer() && checkInterval) {
+            clearInterval(checkInterval);
+          }
+        }
+      }, 300);
     }
-  };
+
+    return () => {
+      if (checkInterval) clearInterval(checkInterval);
+    };
+  }, []);
 
   const play = () => {
-    setHasStarted(true);
     setIsPlaying(true);
 
     if (customAudioUrl && audioRef.current) {
       audioRef.current.play().catch(() => {});
+      return;
+    }
+
+    if (ytPlayerRef.current && typeof ytPlayerRef.current.playVideo === 'function') {
+      try {
+        ytPlayerRef.current.unMute();
+        ytPlayerRef.current.setVolume(isMuted ? 0 : volume);
+        ytPlayerRef.current.playVideo();
+      } catch {
+        // safe play
+      }
     } else {
-      // Delay command slightly so iframe has rendered if first mount
-      setTimeout(() => {
-        sendYouTubeCommand('playVideo');
-        sendYouTubeCommand('unMute');
-        sendYouTubeCommand('setVolume', isMuted ? 0 : volume);
-      }, 150);
+      pendingPlayRef.current = true;
     }
   };
 
   const pause = () => {
     setIsPlaying(false);
+    pendingPlayRef.current = false;
 
     if (audioRef.current) {
       audioRef.current.pause();
     }
-    sendYouTubeCommand('pauseVideo');
+
+    if (ytPlayerRef.current && typeof ytPlayerRef.current.pauseVideo === 'function') {
+      try {
+        ytPlayerRef.current.pauseVideo();
+      } catch {
+        // safe pause
+      }
+    }
   };
 
   const togglePlay = () => {
@@ -91,8 +180,12 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     if (customAudioUrl && audioRef.current) {
       audioRef.current.currentTime = clamped;
-    } else {
-      sendYouTubeCommand('seekTo', clamped);
+    } else if (ytPlayerRef.current && typeof ytPlayerRef.current.seekTo === 'function') {
+      try {
+        ytPlayerRef.current.seekTo(clamped, true);
+      } catch {
+        // safe seek
+      }
     }
   };
 
@@ -103,12 +196,16 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     if (customAudioUrl && audioRef.current) {
       audioRef.current.volume = newVol / 100;
       audioRef.current.muted = newVol === 0;
-    } else {
-      sendYouTubeCommand('setVolume', newVol);
-      if (newVol === 0) {
-        sendYouTubeCommand('mute');
-      } else {
-        sendYouTubeCommand('unMute');
+    } else if (ytPlayerRef.current) {
+      try {
+        ytPlayerRef.current.setVolume(newVol);
+        if (newVol === 0) {
+          ytPlayerRef.current.mute();
+        } else {
+          ytPlayerRef.current.unMute();
+        }
+      } catch {
+        // safe volume
       }
     }
   };
@@ -117,12 +214,20 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     if (isMuted) {
       setIsMuted(false);
       setVolume(volume || 80);
+      if (ytPlayerRef.current && typeof ytPlayerRef.current.unMute === 'function') {
+        try {
+          ytPlayerRef.current.unMute();
+        } catch {}
+      }
     } else {
       setIsMuted(true);
       if (customAudioUrl && audioRef.current) {
         audioRef.current.muted = true;
-      } else {
-        sendYouTubeCommand('mute');
+      }
+      if (ytPlayerRef.current && typeof ytPlayerRef.current.mute === 'function') {
+        try {
+          ytPlayerRef.current.mute();
+        } catch {}
       }
     }
   };
@@ -131,7 +236,12 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const url = URL.createObjectURL(file);
     setCustomAudioUrl(url);
     setCustomFileName(file.name);
-    sendYouTubeCommand('pauseVideo');
+
+    if (ytPlayerRef.current && typeof ytPlayerRef.current.pauseVideo === 'function') {
+      try {
+        ytPlayerRef.current.pauseVideo();
+      } catch {}
+    }
 
     setTimeout(() => {
       if (audioRef.current) {
@@ -142,12 +252,25 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }, 200);
   };
 
-  // Progress timer for UI scrub bar (hardware-friendly 1s tick)
+  // Sync real-time progress from YT player or HTML5 audio
   useEffect(() => {
     if (isPlaying) {
       progressTimerRef.current = window.setInterval(() => {
-        setCurrentTime((prev) => (prev >= TOTAL_DURATION_SEC ? 0 : prev + 1));
-      }, 1000);
+        if (customAudioUrl && audioRef.current) {
+          setCurrentTime(Math.floor(audioRef.current.currentTime));
+        } else if (ytPlayerRef.current && typeof ytPlayerRef.current.getCurrentTime === 'function') {
+          try {
+            const t = Math.floor(ytPlayerRef.current.getCurrentTime());
+            if (!isNaN(t) && t >= 0) {
+              setCurrentTime(t);
+            }
+          } catch {
+            // ignore
+          }
+        } else {
+          setCurrentTime((prev) => (prev >= TOTAL_DURATION_SEC ? 0 : prev + 1));
+        }
+      }, 800);
     } else {
       if (progressTimerRef.current) {
         clearInterval(progressTimerRef.current);
@@ -159,7 +282,25 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         clearInterval(progressTimerRef.current);
       }
     };
-  }, [isPlaying]);
+  }, [isPlaying, customAudioUrl]);
+
+  // One-time gesture trigger to satisfy mobile browser autoplay policies
+  useEffect(() => {
+    const handleGesture = () => {
+      play();
+      cleanupGestures();
+    };
+
+    const cleanupGestures = () => {
+      window.removeEventListener('click', handleGesture);
+      window.removeEventListener('touchstart', handleGesture);
+    };
+
+    window.addEventListener('click', handleGesture, { passive: true, once: true });
+    window.addEventListener('touchstart', handleGesture, { passive: true, once: true });
+
+    return () => cleanupGestures();
+  }, []);
 
   return (
     <MusicContext.Provider
@@ -181,35 +322,26 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         setCustomFile,
       }}
     >
-      {/* Hidden YouTube audio player: ONLY mounted when user triggers playback, never blocks initial page load */}
-      {hasStarted && (
-        <iframe
-          ref={iframeRef}
-          id="global-valakappu-audio-iframe"
-          loading="lazy"
-          src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?enablejsapi=1&autoplay=1&playsinline=1&rel=0&modestbranding=1&controls=0&origin=${
-            typeof window !== 'undefined' ? window.location.origin : ''
-          }`}
-          title="Background Audio Stream"
-          allow="autoplay; encrypted-media"
-          className="pointer-events-none opacity-0 fixed -top-[9999px] -left-[9999px] w-1 h-1"
-          aria-hidden="true"
-          tabIndex={-1}
-        />
-      )}
+      {/* 
+        Official YouTube IFrame Player Instance
+        Rendered with real dimensions (280x160) and 0.01 opacity so browsers never throttle/suspend audio,
+        pinned off-viewport and non-interactive to user clicks.
+      */}
+      <div
+        className="fixed -bottom-4 -left-4 pointer-events-none overflow-hidden z-0"
+        style={{ width: '280px', height: '160px', opacity: 0.01 }}
+        aria-hidden="true"
+      >
+        <div id="valakappu-youtube-player-instance" />
+      </div>
 
-      {/* HTML5 Audio element for custom uploaded MP3: preload="none" prevents network blocking */}
+      {/* HTML5 Audio element for custom uploaded MP3 files */}
       {customAudioUrl && (
         <audio
           ref={audioRef}
           src={customAudioUrl}
-          preload="none"
+          preload="auto"
           onEnded={() => setIsPlaying(false)}
-          onTimeUpdate={() => {
-            if (audioRef.current) {
-              setCurrentTime(audioRef.current.currentTime);
-            }
-          }}
           className="hidden"
         />
       )}

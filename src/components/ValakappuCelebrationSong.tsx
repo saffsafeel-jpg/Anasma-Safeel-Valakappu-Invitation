@@ -249,6 +249,19 @@ export const ValakappuCelebrationSong: React.FC = () => {
                 </button>
               </div>
             </div>
+
+            {/* Quick Link to Official Music Track */}
+            <div className="pt-2 text-center">
+              <a
+                href="https://www.youtube.com/watch?v=vSJN0JFF0yo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-[11px] text-[#D4AF37]/80 hover:text-[#FFF3B0] transition-colors underline underline-offset-4 decoration-[#D4AF37]/40"
+              >
+                <span>Listen to Full Original Track on YouTube</span>
+                <span className="text-[10px]">↗</span>
+              </a>
+            </div>
           </div>
         </motion.div>
       </div>
