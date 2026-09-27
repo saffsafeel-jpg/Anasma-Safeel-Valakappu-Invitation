@@ -1,0 +1,8 @@
+{
+  "name": "Hannah & Nesban - Nikkah Invitation",
+  "description": "A luxury mobile-first interactive Nikkah invitation for Hannah & Nesban with envelope unsealing animation, Quranic blessings, event schedule, live countdown, and live Google Sheets RSVP integration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
