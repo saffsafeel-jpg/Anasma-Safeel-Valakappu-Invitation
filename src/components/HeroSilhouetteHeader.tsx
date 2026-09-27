@@ -58,11 +58,11 @@ export const HeroSilhouetteHeader: React.FC<HeroSilhouetteHeaderProps> = () => {
 
   return (
     <section className="relative w-full min-h-[92vh] flex flex-col justify-between items-center text-center px-5 pt-8 pb-10 overflow-hidden bg-gradient-to-b from-[#070D18] via-[#0B1325] to-[#121B2F]">
-      {/* Ambient Starry Sky & Deep Twilight Lighting */}
+      {/* Ambient Starry Sky & Deep Twilight Lighting (Optimized for 60fps mobile) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Deep navy & twilight horizon glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[340px] h-[340px] bg-[#D4AF37]/15 rounded-full blur-[90px] animate-pulse-glow" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[280px] h-[280px] bg-[#E5C378]/10 rounded-full blur-[70px]" />
+        {/* Deep navy & twilight horizon glow (GPU radial gradients) */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[340px] h-[340px] bg-[radial-gradient(circle,rgba(212,175,55,0.15)_0%,transparent_70%)]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[280px] h-[280px] bg-[radial-gradient(circle,rgba(229,195,120,0.1)_0%,transparent_70%)]" />
 
         {/* Subtle twinkling stars */}
         <span className="absolute top-[8%] left-[15%] w-1 h-1 rounded-full bg-white/70 animate-ping opacity-60" />

@@ -63,10 +63,10 @@ export const ValakappuCoverPage: React.FC<ValakappuCoverPageProps> = ({ onOpenIn
         {/* Deep starry texture */}
         <div className="absolute inset-0 bg-[radial-gradient(#FAF8F5_1px,transparent_1px)] [background-size:24px_24px] opacity-20" />
         
-        {/* Soft Golden Ambient Glows */}
-        <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#D4AF37]/15 rounded-full blur-[110px]" />
-        <div className="absolute top-1/2 -left-20 w-80 h-80 bg-[#0E1F38]/60 rounded-full blur-[90px]" />
-        <div className="absolute -bottom-16 right-0 w-88 h-88 bg-[#D4AF37]/10 rounded-full blur-[100px]" />
+        {/* Soft Golden Ambient Glows (GPU-friendly radial gradients with zero blur overhead) */}
+        <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-96 h-96 bg-[radial-gradient(circle,rgba(212,175,55,0.18)_0%,transparent_70%)] pointer-events-none" />
+        <div className="absolute top-1/2 -left-20 w-80 h-80 bg-[radial-gradient(circle,rgba(14,31,56,0.6)_0%,transparent_70%)] pointer-events-none" />
+        <div className="absolute -bottom-16 right-0 w-88 h-88 bg-[radial-gradient(circle,rgba(212,175,55,0.14)_0%,transparent_70%)] pointer-events-none" />
 
         {/* Traditional Royal Gold Corner Filigrees */}
         <div className="absolute top-3 left-3 w-16 h-16 border-t-2 border-l-2 border-[#D4AF37]/50 rounded-tl-xl pointer-events-none" />

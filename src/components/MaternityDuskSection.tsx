@@ -18,10 +18,10 @@ export const MaternityDuskSection: React.FC = () => {
 
   return (
     <section className="relative w-full py-12 px-6 bg-gradient-to-b from-[#121B2F] via-[#0E1626] to-[#0A101C] text-[#FAF8F5] overflow-hidden">
-      {/* Warm Golden Hour & Dusk Ambient Radiance */}
+      {/* Warm Golden Hour & Dusk Ambient Radiance (GPU-friendly radial gradients) */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-[#E5C378]/10 blur-[80px]" />
-        <div className="absolute bottom-10 right-4 w-60 h-60 rounded-full bg-[#D4AF37]/10 blur-[60px]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 bg-[radial-gradient(circle,rgba(229,195,120,0.12)_0%,transparent_70%)]" />
+        <div className="absolute bottom-10 right-4 w-60 h-60 bg-[radial-gradient(circle,rgba(212,175,55,0.12)_0%,transparent_70%)]" />
       </div>
 
       <div className="relative z-10 max-w-[420px] mx-auto space-y-7 text-center">

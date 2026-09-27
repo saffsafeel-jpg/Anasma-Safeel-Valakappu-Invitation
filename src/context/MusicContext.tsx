@@ -1,13 +1,6 @@
 import React, { createContext, useContext, useState, useRef, useEffect, ReactNode } from 'react';
 
-declare global {
-  interface Window {
-    YT?: any;
-    onYouTubeIframeAPIReady?: () => void;
-  }
-}
-
-const YOUTUBE_VIDEO_ID = 'vSJN0JFF0yo';
+export const YOUTUBE_VIDEO_ID = 'vSJN0JFF0yo';
 export const SONG_TITLE = 'Azhagu Kutti Chellam';
 export const SONG_ARTIST = 'Ved Shanker · Shakthisree Gopalan';
 export const TOTAL_DURATION_SEC = 225;
@@ -34,136 +27,55 @@ const MusicContext = createContext<MusicContextType | null>(null);
 
 export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hasMountedPlayer, setHasMountedPlayer] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolumeState] = useState(90);
   const [isMuted, setIsMuted] = useState(false);
   const [customAudioUrl, setCustomAudioUrl] = useState<string | null>(null);
   const [customFileName, setCustomFileName] = useState<string | null>(null);
 
-  const ytPlayerRef = useRef<any>(null);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const progressTimerRef = useRef<number | null>(null);
-  const pendingPlayRef = useRef(false);
 
-  // Initialize YouTube IFrame Player
-  useEffect(() => {
-    let checkInterval: number | null = null;
-
-    const initPlayer = () => {
-      if (!window.YT || !window.YT.Player) return false;
-      const targetEl = document.getElementById('valakappu-youtube-player-instance');
-      if (!targetEl) return false;
-
+  // Send postMessage command to YouTube iframe
+  const sendYouTubeCommand = (func: string, args: string | number = '') => {
+    if (iframeRef.current && iframeRef.current.contentWindow) {
       try {
-        ytPlayerRef.current = new window.YT.Player('valakappu-youtube-player-instance', {
-          videoId: YOUTUBE_VIDEO_ID,
-          width: '280',
-          height: '160',
-          playerVars: {
-            autoplay: 0,
-            controls: 0,
-            disablekb: 1,
-            enablejsapi: 1,
-            fs: 0,
-            modestbranding: 1,
-            playsinline: 1,
-            rel: 0,
-            origin: typeof window !== 'undefined' ? window.location.origin : '',
-          },
-          events: {
-            onReady: (event: any) => {
-              ytPlayerRef.current = event.target;
-              if (pendingPlayRef.current) {
-                pendingPlayRef.current = false;
-                try {
-                  event.target.unMute();
-                  event.target.setVolume(volume);
-                  event.target.playVideo();
-                } catch {
-                  // ignore
-                }
-              }
-            },
-            onStateChange: (event: any) => {
-              // 1 = PLAYING, 2 = PAUSED, 0 = ENDED
-              if (event.data === 1) {
-                setIsPlaying(true);
-              } else if (event.data === 2 || event.data === 0) {
-                setIsPlaying(false);
-              }
-            },
-            onError: (err: any) => {
-              console.warn('YT Player notice:', err);
-            },
-          },
-        });
-        return true;
-      } catch (err) {
-        console.warn('Error creating YT player:', err);
-        return false;
+        iframeRef.current.contentWindow.postMessage(
+          JSON.stringify({ event: 'command', func, args }),
+          '*'
+        );
+      } catch {
+        // safe postMessage
       }
-    };
-
-    if (window.YT && window.YT.Player) {
-      initPlayer();
-    } else {
-      const prevCallback = window.onYouTubeIframeAPIReady;
-      window.onYouTubeIframeAPIReady = () => {
-        if (typeof prevCallback === 'function') prevCallback();
-        initPlayer();
-      };
-
-      // Fallback check in case script loaded before callback assignment
-      checkInterval = window.setInterval(() => {
-        if (window.YT && window.YT.Player && !ytPlayerRef.current) {
-          if (initPlayer() && checkInterval) {
-            clearInterval(checkInterval);
-          }
-        }
-      }, 300);
     }
-
-    return () => {
-      if (checkInterval) clearInterval(checkInterval);
-    };
-  }, []);
+  };
 
   const play = () => {
+    // Only mount the YouTube player when user actually triggers play (zero initial load lag!)
+    if (!hasMountedPlayer) {
+      setHasMountedPlayer(true);
+    }
     setIsPlaying(true);
 
     if (customAudioUrl && audioRef.current) {
       audioRef.current.play().catch(() => {});
-      return;
-    }
-
-    if (ytPlayerRef.current && typeof ytPlayerRef.current.playVideo === 'function') {
-      try {
-        ytPlayerRef.current.unMute();
-        ytPlayerRef.current.setVolume(isMuted ? 0 : volume);
-        ytPlayerRef.current.playVideo();
-      } catch {
-        // safe play
-      }
     } else {
-      pendingPlayRef.current = true;
+      setTimeout(() => {
+        sendYouTubeCommand('playVideo');
+        sendYouTubeCommand('unMute');
+        sendYouTubeCommand('setVolume', isMuted ? 0 : volume);
+      }, 200);
     }
   };
 
   const pause = () => {
     setIsPlaying(false);
-    pendingPlayRef.current = false;
-
     if (audioRef.current) {
       audioRef.current.pause();
     }
-
-    if (ytPlayerRef.current && typeof ytPlayerRef.current.pauseVideo === 'function') {
-      try {
-        ytPlayerRef.current.pauseVideo();
-      } catch {
-        // safe pause
-      }
-    }
+    sendYouTubeCommand('pauseVideo');
   };
 
   const togglePlay = () => {
@@ -180,12 +92,8 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     if (customAudioUrl && audioRef.current) {
       audioRef.current.currentTime = clamped;
-    } else if (ytPlayerRef.current && typeof ytPlayerRef.current.seekTo === 'function') {
-      try {
-        ytPlayerRef.current.seekTo(clamped, true);
-      } catch {
-        // safe seek
-      }
+    } else {
+      sendYouTubeCommand('seekTo', clamped);
     }
   };
 
@@ -196,16 +104,12 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     if (customAudioUrl && audioRef.current) {
       audioRef.current.volume = newVol / 100;
       audioRef.current.muted = newVol === 0;
-    } else if (ytPlayerRef.current) {
-      try {
-        ytPlayerRef.current.setVolume(newVol);
-        if (newVol === 0) {
-          ytPlayerRef.current.mute();
-        } else {
-          ytPlayerRef.current.unMute();
-        }
-      } catch {
-        // safe volume
+    } else {
+      sendYouTubeCommand('setVolume', newVol);
+      if (newVol === 0) {
+        sendYouTubeCommand('mute');
+      } else {
+        sendYouTubeCommand('unMute');
       }
     }
   };
@@ -214,21 +118,14 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     if (isMuted) {
       setIsMuted(false);
       setVolume(volume || 80);
-      if (ytPlayerRef.current && typeof ytPlayerRef.current.unMute === 'function') {
-        try {
-          ytPlayerRef.current.unMute();
-        } catch {}
-      }
+      sendYouTubeCommand('unMute');
+      sendYouTubeCommand('setVolume', volume || 80);
     } else {
       setIsMuted(true);
       if (customAudioUrl && audioRef.current) {
         audioRef.current.muted = true;
       }
-      if (ytPlayerRef.current && typeof ytPlayerRef.current.mute === 'function') {
-        try {
-          ytPlayerRef.current.mute();
-        } catch {}
-      }
+      sendYouTubeCommand('mute');
     }
   };
 
@@ -236,12 +133,7 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const url = URL.createObjectURL(file);
     setCustomAudioUrl(url);
     setCustomFileName(file.name);
-
-    if (ytPlayerRef.current && typeof ytPlayerRef.current.pauseVideo === 'function') {
-      try {
-        ytPlayerRef.current.pauseVideo();
-      } catch {}
-    }
+    sendYouTubeCommand('pauseVideo');
 
     setTimeout(() => {
       if (audioRef.current) {
@@ -252,25 +144,12 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }, 200);
   };
 
-  // Sync real-time progress from YT player or HTML5 audio
+  // Progress timer for UI scrub bar
   useEffect(() => {
     if (isPlaying) {
       progressTimerRef.current = window.setInterval(() => {
-        if (customAudioUrl && audioRef.current) {
-          setCurrentTime(Math.floor(audioRef.current.currentTime));
-        } else if (ytPlayerRef.current && typeof ytPlayerRef.current.getCurrentTime === 'function') {
-          try {
-            const t = Math.floor(ytPlayerRef.current.getCurrentTime());
-            if (!isNaN(t) && t >= 0) {
-              setCurrentTime(t);
-            }
-          } catch {
-            // ignore
-          }
-        } else {
-          setCurrentTime((prev) => (prev >= TOTAL_DURATION_SEC ? 0 : prev + 1));
-        }
-      }, 800);
+        setCurrentTime((prev) => (prev >= TOTAL_DURATION_SEC ? 0 : prev + 1));
+      }, 1000);
     } else {
       if (progressTimerRef.current) {
         clearInterval(progressTimerRef.current);
@@ -282,25 +161,7 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         clearInterval(progressTimerRef.current);
       }
     };
-  }, [isPlaying, customAudioUrl]);
-
-  // One-time gesture trigger to satisfy mobile browser autoplay policies
-  useEffect(() => {
-    const handleGesture = () => {
-      play();
-      cleanupGestures();
-    };
-
-    const cleanupGestures = () => {
-      window.removeEventListener('click', handleGesture);
-      window.removeEventListener('touchstart', handleGesture);
-    };
-
-    window.addEventListener('click', handleGesture, { passive: true, once: true });
-    window.addEventListener('touchstart', handleGesture, { passive: true, once: true });
-
-    return () => cleanupGestures();
-  }, []);
+  }, [isPlaying]);
 
   return (
     <MusicContext.Provider
@@ -310,8 +171,8 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         duration: TOTAL_DURATION_SEC,
         volume,
         isMuted,
-        songTitle: SONG_TITLE,
-        songArtist: SONG_ARTIST,
+        songTitle: customFileName ? customFileName.replace(/\.[^/.]+$/, '') : SONG_TITLE,
+        songArtist: customFileName ? 'Custom Track' : SONG_ARTIST,
         customFileName,
         play,
         pause,
@@ -323,17 +184,29 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       }}
     >
       {/* 
-        Official YouTube IFrame Player Instance
-        Rendered with real dimensions (280x160) and 0.01 opacity so browsers never throttle/suspend audio,
-        pinned off-viewport and non-interactive to user clicks.
+        Azhagu Kutti Chellam YouTube Stream:
+        Mounted strictly on-demand after user interaction (zero initial page load latency!)
+        Real viewport dimensions (200x120) with 0.01 opacity so mobile Safari & Chrome never throttle or mute the track.
       */}
-      <div
-        className="fixed -bottom-4 -left-4 pointer-events-none overflow-hidden z-0"
-        style={{ width: '280px', height: '160px', opacity: 0.01 }}
-        aria-hidden="true"
-      >
-        <div id="valakappu-youtube-player-instance" />
-      </div>
+      {hasMountedPlayer && (
+        <div
+          className="fixed bottom-0 left-0 pointer-events-none z-0 overflow-hidden"
+          style={{ width: '200px', height: '120px', opacity: 0.01 }}
+          aria-hidden="true"
+        >
+          <iframe
+            ref={iframeRef}
+            id="valakappu-azhagu-kutti-player"
+            src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?enablejsapi=1&autoplay=1&playsinline=1&controls=0&rel=0&origin=${
+              typeof window !== 'undefined' ? window.location.origin : ''
+            }`}
+            title="Azhagu Kutti Chellam - Background Audio"
+            allow="autoplay; encrypted-media"
+            className="w-full h-full border-0"
+            tabIndex={-1}
+          />
+        </div>
+      )}
 
       {/* HTML5 Audio element for custom uploaded MP3 files */}
       {customAudioUrl && (

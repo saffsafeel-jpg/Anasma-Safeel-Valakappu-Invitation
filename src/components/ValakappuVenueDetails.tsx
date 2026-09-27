@@ -61,9 +61,9 @@ export const ValakappuVenueDetails: React.FC = () => {
 
   return (
     <section id="venue-location" className="relative w-full py-12 px-6 bg-gradient-to-b from-[#121B2F] via-[#0D1527] to-[#070D18] text-[#FAF8F5]">
-      {/* Decorative Glow */}
+      {/* Decorative Glow (GPU-friendly radial gradient) */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-[#D4AF37]/10 blur-[85px]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 bg-[radial-gradient(circle,rgba(212,175,55,0.14)_0%,transparent_70%)]" />
       </div>
 
       <div className="relative z-10 max-w-[420px] mx-auto space-y-7 text-center">

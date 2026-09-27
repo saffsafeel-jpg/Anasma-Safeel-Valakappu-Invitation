@@ -49,10 +49,10 @@ export const ValakappuProgramTimeline: React.FC = () => {
 
   return (
     <section id="program-timeline" className="relative w-full py-12 px-6 bg-gradient-to-b from-[#0A101C] via-[#0E172E] to-[#121B2F] text-[#FAF8F5]">
-      {/* Decorative ambient background */}
+      {/* Decorative ambient background (GPU-friendly radial gradients) */}
       <div className="absolute inset-0 pointer-events-none opacity-30">
-        <div className="absolute top-1/4 right-0 w-72 h-72 bg-[#D4AF37]/15 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 left-0 w-72 h-72 bg-[#1A2C54]/30 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 right-0 w-72 h-72 bg-[radial-gradient(circle,rgba(212,175,55,0.18)_0%,transparent_70%)]" />
+        <div className="absolute bottom-1/4 left-0 w-72 h-72 bg-[radial-gradient(circle,rgba(26,44,84,0.35)_0%,transparent_70%)]" />
       </div>
 
       <div className="relative z-10 max-w-[420px] mx-auto space-y-8">

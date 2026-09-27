@@ -21,10 +21,10 @@ function ValakappuAppContent() {
 
   return (
     <div className="min-h-screen w-full bg-[#050912] flex justify-center items-start sm:py-6 sm:px-4 text-[#FAF8F5]">
-      {/* Desktop background ambient lighting */}
+      {/* Desktop background ambient lighting (Zero GPU blur overhead) */}
       <div className="fixed inset-0 pointer-events-none opacity-40 overflow-hidden">
-        <div className="absolute top-10 left-1/4 w-[420px] h-[420px] bg-[#D4AF37]/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-10 right-1/4 w-[450px] h-[450px] bg-[#121B2F]/60 rounded-full blur-[140px]" />
+        <div className="absolute top-10 left-1/4 w-[420px] h-[420px] bg-[radial-gradient(circle,rgba(212,175,55,0.12)_0%,transparent_70%)]" />
+        <div className="absolute bottom-10 right-1/4 w-[450px] h-[450px] bg-[radial-gradient(circle,rgba(18,27,47,0.7)_0%,transparent_70%)]" />
       </div>
 
       {/* Mobile-First Frame Container (Strictly max-w-[480px]) */}

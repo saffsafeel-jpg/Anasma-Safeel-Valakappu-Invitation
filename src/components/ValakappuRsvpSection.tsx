@@ -19,9 +19,9 @@ export const ValakappuRsvpSection: React.FC<ValakappuRsvpSectionProps> = ({ onOp
 
   return (
     <section id="rsvp-section" className="relative w-full py-14 px-6 bg-gradient-to-b from-[#070D18] via-[#0B1325] to-[#040811] text-[#FAF8F5]">
-      {/* Decorative Warm Ambient Glow */}
+      {/* Decorative Warm Ambient Glow (GPU-friendly radial gradient) */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-88 h-88 rounded-full bg-[#D4AF37]/15 blur-[95px]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-88 h-88 bg-[radial-gradient(circle,rgba(212,175,55,0.14)_0%,transparent_70%)]" />
       </div>
 
       <div className="relative z-10 max-w-[420px] mx-auto space-y-8 text-center">

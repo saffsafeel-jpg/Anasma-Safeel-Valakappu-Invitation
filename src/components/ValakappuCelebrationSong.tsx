@@ -52,9 +52,9 @@ export const ValakappuCelebrationSong: React.FC = () => {
       id="celebration-song"
       className="relative w-full py-12 px-5 bg-gradient-to-b from-[#0E1626] via-[#10192C] to-[#0A101C] text-[#FAF8F5] overflow-hidden"
     >
-      {/* Ambient background gold glow */}
+      {/* Ambient background gold glow (GPU-friendly radial gradient) */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-[#D4AF37]/10 blur-[90px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[radial-gradient(circle,rgba(212,175,55,0.14)_0%,transparent_70%)]" />
       </div>
 
       <div className="relative z-10 max-w-[440px] mx-auto space-y-6 text-center">
