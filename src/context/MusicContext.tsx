@@ -59,9 +59,12 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     if (customAudioUrl && audioRef.current) {
       audioRef.current.play().catch(() => {});
     } else {
-      sendYouTubeCommand('playVideo');
-      sendYouTubeCommand('unMute');
-      sendYouTubeCommand('setVolume', isMuted ? 0 : volume);
+      // Delay command slightly so iframe has rendered if first mount
+      setTimeout(() => {
+        sendYouTubeCommand('playVideo');
+        sendYouTubeCommand('unMute');
+        sendYouTubeCommand('setVolume', isMuted ? 0 : volume);
+      }, 150);
     }
   };
 
@@ -139,7 +142,7 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }, 200);
   };
 
-  // Progress timer for UI scrub bar (hardware friendly 1s tick)
+  // Progress timer for UI scrub bar (hardware-friendly 1s tick)
   useEffect(() => {
     if (isPlaying) {
       progressTimerRef.current = window.setInterval(() => {
@@ -157,30 +160,6 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       }
     };
   }, [isPlaying]);
-
-  // ================= USER'S FIRST TAP AUDIO ACTIVATION =================
-  // Non-blocking: background audio file does not load on initial render.
-  // Music only starts upon the user's first tap anywhere on the screen.
-  useEffect(() => {
-    const handleFirstTap = () => {
-      play();
-      cleanupFirstTap();
-    };
-
-    const cleanupFirstTap = () => {
-      window.removeEventListener('click', handleFirstTap);
-      window.removeEventListener('touchstart', handleFirstTap);
-      window.removeEventListener('pointerdown', handleFirstTap);
-    };
-
-    window.addEventListener('click', handleFirstTap, { passive: true, once: true });
-    window.addEventListener('touchstart', handleFirstTap, { passive: true, once: true });
-    window.addEventListener('pointerdown', handleFirstTap, { passive: true, once: true });
-
-    return () => {
-      cleanupFirstTap();
-    };
-  }, []);
 
   return (
     <MusicContext.Provider
@@ -202,11 +181,12 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         setCustomFile,
       }}
     >
-      {/* Hidden YouTube audio player: Only loads when hasStarted is true to avoid initial network block */}
+      {/* Hidden YouTube audio player: ONLY mounted when user triggers playback, never blocks initial page load */}
       {hasStarted && (
         <iframe
           ref={iframeRef}
           id="global-valakappu-audio-iframe"
+          loading="lazy"
           src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?enablejsapi=1&autoplay=1&playsinline=1&rel=0&modestbranding=1&controls=0&origin=${
             typeof window !== 'undefined' ? window.location.origin : ''
           }`}

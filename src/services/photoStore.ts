@@ -1,7 +1,8 @@
-// Photo storage service: manages permanent static couple photos and local caching
+// Photo storage service: manages permanent couple photos and user custom uploads
 import { CouplePhoto } from '../types';
 
-export const STATIC_COUPLE_PHOTO = '/assets/couple_photo.jpg';
+export const STATIC_COVER_PHOTO = '/assets/cover.jpg';
+export const STATIC_HERO_PHOTO = '/assets/hero.jpg';
 
 export const DEFAULT_PHOTOS: CouplePhoto[] = [
   {
@@ -9,7 +10,7 @@ export const DEFAULT_PHOTOS: CouplePhoto[] = [
     title: 'Valakappu Invitation Cover',
     subtitle: 'Anasma & Safeel',
     caption: 'Celebrating new beginnings & honoring parents-to-be on Sunday, 04th October 2026.',
-    url: '/assets/couple_photo.jpg',
+    url: '/assets/cover.jpg',
     defaultVisual: 'couple_cover',
   },
   {
@@ -17,7 +18,7 @@ export const DEFAULT_PHOTOS: CouplePhoto[] = [
     title: 'Anasma & Safeel',
     subtitle: 'The Parents-To-Be',
     caption: 'Celebrating new beginnings & the sweetest blessing on the way.',
-    url: '/assets/couple_photo.jpg',
+    url: '/assets/hero.jpg',
     defaultVisual: 'couple_hero',
   },
   {
@@ -54,18 +55,44 @@ export const DEFAULT_PHOTOS: CouplePhoto[] = [
   },
 ];
 
-const LOCAL_STORAGE_KEY = 'valakappu_custom_photos_v2';
+const STORAGE_KEYS = [
+  'valakappu_custom_photos_v1',
+  'valakappu_custom_photos_v2',
+  'valakappu_custom_photos',
+];
+const PRIMARY_KEY = 'valakappu_custom_photos_v1';
 const LISTENERS: Array<() => void> = [];
 
-// Pre-populated static in-memory photos: ZERO network latency on initial render
+// Pre-populated in-memory photos: EXACT images as configured, ZERO network latency
 const MEMORY_PHOTOS: Record<string, string> = {
-  cover: '/assets/couple_photo.jpg',
-  hero: '/assets/couple_photo.jpg',
+  cover: '/assets/cover.jpg',
+  hero: '/assets/hero.jpg',
   ritual: '/assets/ritual.jpg',
   felicitation: '/assets/felicitation.jpg',
   dusk: '/assets/dusk.jpg',
   venue: '/assets/venue.jpg',
 };
+
+// Check all storage versions on startup
+function readFromAllStorage() {
+  if (typeof window === 'undefined') return;
+  for (const k of STORAGE_KEYS) {
+    try {
+      const raw = localStorage.getItem(k);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          Object.assign(MEMORY_PHOTOS, parsed);
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }
+}
+
+// Read storage immediately on script load
+readFromAllStorage();
 
 export function subscribeToPhotos(callback: () => void) {
   LISTENERS.push(callback);
@@ -90,28 +117,51 @@ function safeSetLocalStorage(data: Record<string, string>) {
     const safeData: Record<string, string> = {};
     for (const [k, v] of Object.entries(data)) {
       if (typeof v === 'string') {
-        if (!v.startsWith('data:image/') || v.length < 80000) {
+        if (!v.startsWith('data:image/') || v.length < 500000) {
           safeData[k] = v;
         }
       }
     }
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(safeData));
+    const jsonStr = JSON.stringify(safeData);
+    STORAGE_KEYS.forEach((k) => {
+      try {
+        localStorage.setItem(k, jsonStr);
+      } catch {
+        // ignore
+      }
+    });
   } catch {
     // ignore
   }
 }
 
-// Zero-latency synchronous initialization: reads local storage if present, no API blocking
+// Background sync: never blocks initial paint
 export function initPhotosSync(): Promise<Record<string, string>> {
-  try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (raw) {
-      const localData = JSON.parse(raw);
-      Object.assign(MEMORY_PHOTOS, localData);
-    }
-  } catch {
-    // ignore
+  readFromAllStorage();
+
+  // Background fetch from server photos without blocking
+  if (typeof window !== 'undefined') {
+    setTimeout(() => {
+      fetch('/api/photos')
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.photos && typeof data.photos === 'object') {
+            let hasNew = false;
+            for (const [k, v] of Object.entries(data.photos)) {
+              if (v && typeof v === 'string' && MEMORY_PHOTOS[k] !== v) {
+                MEMORY_PHOTOS[k] = v;
+                hasNew = true;
+              }
+            }
+            if (hasNew) {
+              notifyListeners();
+            }
+          }
+        })
+        .catch(() => {});
+    }, 1000);
   }
+
   return Promise.resolve({ ...MEMORY_PHOTOS });
 }
 
@@ -121,23 +171,25 @@ export function getCustomPhoto(photoId: string): string {
     return MEMORY_PHOTOS[photoId];
   }
 
-  // 2. Check localStorage
-  try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (raw) {
-      const obj = JSON.parse(raw);
-      if (obj[photoId]) {
-        MEMORY_PHOTOS[photoId] = obj[photoId];
-        return obj[photoId];
+  // 2. Check localStorage keys
+  for (const k of STORAGE_KEYS) {
+    try {
+      const raw = localStorage.getItem(k);
+      if (raw) {
+        const obj = JSON.parse(raw);
+        if (obj[photoId]) {
+          MEMORY_PHOTOS[photoId] = obj[photoId];
+          return obj[photoId];
+        }
       }
+    } catch {
+      // ignore
     }
-  } catch {
-    // ignore
   }
 
-  // 3. Fallback to static local asset
+  // 3. Fallback to default
   const defaultItem = DEFAULT_PHOTOS.find((p) => p.id === photoId);
-  return defaultItem?.url || '/assets/couple_photo.jpg';
+  return defaultItem?.url || (photoId === 'cover' ? '/assets/cover.jpg' : '/assets/hero.jpg');
 }
 
 export async function saveCustomPhoto(photoId: string, photoDataUrl: string): Promise<boolean> {
@@ -147,7 +199,7 @@ export async function saveCustomPhoto(photoId: string, photoDataUrl: string): Pr
 
     let current: Record<string, string> = {};
     try {
-      const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+      const raw = localStorage.getItem(PRIMARY_KEY);
       if (raw) {
         current = JSON.parse(raw);
       }
@@ -156,6 +208,13 @@ export async function saveCustomPhoto(photoId: string, photoDataUrl: string): Pr
     }
     current[photoId] = photoDataUrl;
     safeSetLocalStorage(current);
+
+    // Also persist to server in background
+    fetch('/api/photos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ photoId, photoData: photoDataUrl }),
+    }).catch(() => {});
 
     return true;
   } catch (e) {
@@ -167,18 +226,22 @@ export async function saveCustomPhoto(photoId: string, photoDataUrl: string): Pr
 export async function resetCustomPhotos(): Promise<boolean> {
   try {
     Object.keys(MEMORY_PHOTOS).forEach((k) => delete MEMORY_PHOTOS[k]);
-    MEMORY_PHOTOS['cover'] = '/assets/couple_photo.jpg';
-    MEMORY_PHOTOS['hero'] = '/assets/couple_photo.jpg';
+    MEMORY_PHOTOS['cover'] = '/assets/cover.jpg';
+    MEMORY_PHOTOS['hero'] = '/assets/hero.jpg';
     MEMORY_PHOTOS['ritual'] = '/assets/ritual.jpg';
     MEMORY_PHOTOS['felicitation'] = '/assets/felicitation.jpg';
     MEMORY_PHOTOS['dusk'] = '/assets/dusk.jpg';
     MEMORY_PHOTOS['venue'] = '/assets/venue.jpg';
 
-    try {
-      localStorage.removeItem(LOCAL_STORAGE_KEY);
-    } catch {
-      // ignore
-    }
+    STORAGE_KEYS.forEach((k) => {
+      try {
+        localStorage.removeItem(k);
+      } catch {
+        // ignore
+      }
+    });
+
+    fetch('/api/photos', { method: 'DELETE' }).catch(() => {});
     notifyListeners();
     return true;
   } catch {
