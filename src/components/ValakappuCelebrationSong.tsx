@@ -105,22 +105,15 @@ export const ValakappuCelebrationSong: React.FC = () => {
                 </div>
               </div>
 
-              {/* Live Dancing Equalizer Waveform */}
-              <div className="flex items-end justify-center gap-1 h-7 mt-5 px-4 w-full">
-                {[
-                  12, 24, 16, 28, 20, 14, 26, 18, 30, 22, 16, 26, 32, 20, 14, 28, 22, 16, 24, 18,
-                  28, 14, 22, 16, 20,
-                ].map((h, i) => (
+              {/* Live Dancing Equalizer Waveform (Hardware-Accelerated CSS Transforms) */}
+              <div className="flex items-end justify-center gap-1.5 h-7 mt-5 px-4 w-full">
+                {[1, 2, 3, 4, 1, 3, 2, 4, 2, 1, 4, 3, 1, 2, 4, 3, 1, 2, 3, 4].map((variant, i) => (
                   <span
                     key={i}
-                    style={{
-                      height: isPlaying ? `${Math.max(6, (h * ((i % 4) + 1)) / 3.5)}px` : '4px',
-                      transition: 'height 0.25s ease-in-out',
-                    }}
-                    className={`w-1 rounded-full ${
+                    className={`w-1 h-6 rounded-full bg-gradient-to-t from-[#B38728] via-[#FBF5B7] to-[#D4AF37] ${
                       isPlaying
-                        ? 'bg-gradient-to-t from-[#B38728] via-[#FBF5B7] to-[#D4AF37]'
-                        : 'bg-[#D4AF37]/25'
+                        ? `animate-eq-dance-${variant}`
+                        : 'opacity-25 scale-y-[0.2] transform-origin-bottom transition-transform duration-300'
                     }`}
                   />
                 ))}

@@ -16,11 +16,11 @@ export const EnvelopeHero: React.FC<EnvelopeHeroProps> = ({ onOpen, isOpen }) =>
   const handleWaxSealClick = () => {
     if (animStage !== 'sealed') return;
 
-    // Trigger celebratory gold and rose confetti burst
+    // Trigger celebratory gold and rose confetti burst (reduced particle count)
     try {
       confetti({
-        particleCount: 40,
-        spread: 70,
+        particleCount: 10,
+        spread: 50,
         origin: { y: 0.52, x: 0.5 },
         colors: ['#C5A059', '#F3B8BF', '#E8CCD1', '#FFFFFF', '#851D33'],
         disableForReducedMotion: true,

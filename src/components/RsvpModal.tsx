@@ -61,11 +61,11 @@ export const RsvpModal: React.FC<RsvpModalProps> = ({ isOpen, onClose, onSubmitt
         onSubmittedSuccess();
       }
 
-      // 3. Celebratory golden confetti burst
+      // 3. Celebratory golden confetti burst (optimized for 60fps performance)
       try {
         confetti({
-          particleCount: 85,
-          spread: 80,
+          particleCount: 20,
+          spread: 60,
           origin: { y: 0.6 },
           colors: ['#D4AF37', '#FFF3B0', '#E5C378', '#FFFFFF', '#0B1325'],
         });

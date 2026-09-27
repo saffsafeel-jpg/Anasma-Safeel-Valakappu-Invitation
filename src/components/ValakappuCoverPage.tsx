@@ -12,39 +12,32 @@ interface ValakappuCoverPageProps {
 }
 
 export const ValakappuCoverPage: React.FC<ValakappuCoverPageProps> = ({ onOpenInvitation }) => {
-  const [coverPhotoUrl, setCoverPhotoUrl] = useState<string | null>(null);
+  const [coverPhotoUrl, setCoverPhotoUrl] = useState<string>(() => getCustomPhoto('cover'));
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isOpening, setIsOpening] = useState(false);
-  const { play, isPlaying, songTitle } = useMusic();
+  const { play } = useMusic();
 
   useEffect(() => {
     const sync = () => {
-      // Prefer 'cover' photo, fallback to 'hero' photo
       const c = getCustomPhoto('cover') || getCustomPhoto('hero');
       setCoverPhotoUrl(c);
     };
-    sync();
-    initPhotosSync().then(sync);
     const unsub = subscribeToPhotos(sync);
-
-    // Automatically trigger music from the cover page
-    play();
-
     return () => unsub();
-  }, [play]);
+  }, []);
 
   const handleTriggerOpen = () => {
     if (isOpening) return;
     setIsOpening(true);
 
-    // Ensure music is playing
+    // Start celebration music on user interaction
     play();
 
-    // Fire golden celebration confetti burst
+    // Fire golden celebration confetti burst (75% reduced particle count for 60fps smoothness)
     try {
       confetti({
-        particleCount: 50,
-        spread: 60,
+        particleCount: 12,
+        spread: 45,
         origin: { y: 0.7 },
         colors: ['#D4AF37', '#FFF3B0', '#F3E5AB', '#FAF8F5'],
       });
@@ -54,7 +47,7 @@ export const ValakappuCoverPage: React.FC<ValakappuCoverPageProps> = ({ onOpenIn
 
     setTimeout(() => {
       onOpenInvitation();
-    }, 700);
+    }, 550);
   };
 
   return (

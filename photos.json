@@ -1,8 +1,8 @@
 {
-  "cover": "https://i.pinimg.com/736x/d1/0a/0a/d10a0a2ea93b0b9b586ba735814113c4.jpg?nii=t",
-  "hero": "https://i.pinimg.com/736x/83/86/dc/8386dcfd42c06165cce0b58a809f6049.jpg?nii=t",
-  "ritual": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=80",
-  "felicitation": "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1200&q=80",
-  "dusk": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1200&q=80",
-  "venue": "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&w=1200&q=80"
+  "cover": "/assets/couple_photo.jpg",
+  "hero": "/assets/couple_photo.jpg",
+  "ritual": "/assets/ritual.jpg",
+  "felicitation": "/assets/felicitation.jpg",
+  "dusk": "/assets/dusk.jpg",
+  "venue": "/assets/venue.jpg"
 }

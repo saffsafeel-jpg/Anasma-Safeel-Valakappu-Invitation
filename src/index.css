@@ -86,3 +86,43 @@
   border-radius: 9999px;
 }
 
+/* Hardware-accelerated GPU transforms for equalizer */
+@keyframes eq-dance-1 {
+  0%, 100% { transform: scaleY(0.2); }
+  50% { transform: scaleY(1); }
+}
+@keyframes eq-dance-2 {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(0.85); }
+}
+@keyframes eq-dance-3 {
+  0%, 100% { transform: scaleY(0.15); }
+  50% { transform: scaleY(0.95); }
+}
+@keyframes eq-dance-4 {
+  0%, 100% { transform: scaleY(0.25); }
+  50% { transform: scaleY(0.7); }
+}
+
+.animate-eq-dance-1 {
+  animation: eq-dance-1 0.75s ease-in-out infinite;
+  transform-origin: bottom;
+  will-change: transform;
+}
+.animate-eq-dance-2 {
+  animation: eq-dance-2 1.05s ease-in-out infinite 0.15s;
+  transform-origin: bottom;
+  will-change: transform;
+}
+.animate-eq-dance-3 {
+  animation: eq-dance-3 0.65s ease-in-out infinite 0.3s;
+  transform-origin: bottom;
+  will-change: transform;
+}
+.animate-eq-dance-4 {
+  animation: eq-dance-4 0.9s ease-in-out infinite 0.45s;
+  transform-origin: bottom;
+  will-change: transform;
+}
+
+

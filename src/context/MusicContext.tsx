@@ -27,6 +27,7 @@ const MusicContext = createContext<MusicContextType | null>(null);
 
 export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolumeState] = useState(90);
   const [isMuted, setIsMuted] = useState(false);
@@ -36,9 +37,8 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const progressTimerRef = useRef<number | null>(null);
-  const hasUserInteracted = useRef(false);
 
-  // Send command to hidden YouTube iframe
+  // Send command to hidden YouTube iframe safely
   const sendYouTubeCommand = (func: string, args: string | number = '') => {
     if (iframeRef.current && iframeRef.current.contentWindow) {
       try {
@@ -53,7 +53,7 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const play = () => {
-    hasUserInteracted.current = true;
+    setHasStarted(true);
     setIsPlaying(true);
 
     if (customAudioUrl && audioRef.current) {
@@ -139,7 +139,7 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }, 200);
   };
 
-  // Progress timer for UI scrub bar
+  // Progress timer for UI scrub bar (hardware friendly 1s tick)
   useEffect(() => {
     if (isPlaying) {
       progressTimerRef.current = window.setInterval(() => {
@@ -158,36 +158,27 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     };
   }, [isPlaying]);
 
-  // ================= AUTOMATIC PLAYBACK FROM COVER PAGE =================
+  // ================= USER'S FIRST TAP AUDIO ACTIVATION =================
+  // Non-blocking: background audio file does not load on initial render.
+  // Music only starts upon the user's first tap anywhere on the screen.
   useEffect(() => {
-    // 1. Immediately attempt autoplay on load
-    const timer = setTimeout(() => {
+    const handleFirstTap = () => {
       play();
-    }, 400);
-
-    // 2. Mobile/Browser Autoplay Safeguard:
-    // Many mobile browsers (iOS Safari, Android Chrome) block unmuted audio until the user touches or clicks anywhere.
-    // We register one-time listeners so music starts smoothly on the very first touch/click anywhere on the cover page!
-    const handleGesture = () => {
-      play();
-      cleanupGestures();
+      cleanupFirstTap();
     };
 
-    const cleanupGestures = () => {
-      window.removeEventListener('click', handleGesture);
-      window.removeEventListener('touchstart', handleGesture);
-      window.removeEventListener('pointerdown', handleGesture);
-      window.removeEventListener('scroll', handleGesture);
+    const cleanupFirstTap = () => {
+      window.removeEventListener('click', handleFirstTap);
+      window.removeEventListener('touchstart', handleFirstTap);
+      window.removeEventListener('pointerdown', handleFirstTap);
     };
 
-    window.addEventListener('click', handleGesture, { passive: true });
-    window.addEventListener('touchstart', handleGesture, { passive: true });
-    window.addEventListener('pointerdown', handleGesture, { passive: true });
-    window.addEventListener('scroll', handleGesture, { passive: true });
+    window.addEventListener('click', handleFirstTap, { passive: true, once: true });
+    window.addEventListener('touchstart', handleFirstTap, { passive: true, once: true });
+    window.addEventListener('pointerdown', handleFirstTap, { passive: true, once: true });
 
     return () => {
-      clearTimeout(timer);
-      cleanupGestures();
+      cleanupFirstTap();
     };
   }, []);
 
@@ -211,25 +202,28 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         setCustomFile,
       }}
     >
-      {/* Hidden YouTube audio player (ZERO VIDEO DISPLAYED, pure background audio) */}
-      <iframe
-        ref={iframeRef}
-        id="global-valakappu-audio-iframe"
-        src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?enablejsapi=1&autoplay=1&playsinline=1&rel=0&modestbranding=1&controls=0&origin=${
-          typeof window !== 'undefined' ? window.location.origin : ''
-        }`}
-        title="Background Audio Stream"
-        allow="autoplay; encrypted-media"
-        className="pointer-events-none opacity-0 fixed -top-[9999px] -left-[9999px] w-1 h-1"
-        aria-hidden="true"
-        tabIndex={-1}
-      />
+      {/* Hidden YouTube audio player: Only loads when hasStarted is true to avoid initial network block */}
+      {hasStarted && (
+        <iframe
+          ref={iframeRef}
+          id="global-valakappu-audio-iframe"
+          src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?enablejsapi=1&autoplay=1&playsinline=1&rel=0&modestbranding=1&controls=0&origin=${
+            typeof window !== 'undefined' ? window.location.origin : ''
+          }`}
+          title="Background Audio Stream"
+          allow="autoplay; encrypted-media"
+          className="pointer-events-none opacity-0 fixed -top-[9999px] -left-[9999px] w-1 h-1"
+          aria-hidden="true"
+          tabIndex={-1}
+        />
+      )}
 
-      {/* HTML5 Audio element for custom uploaded MP3 */}
+      {/* HTML5 Audio element for custom uploaded MP3: preload="none" prevents network blocking */}
       {customAudioUrl && (
         <audio
           ref={audioRef}
           src={customAudioUrl}
+          preload="none"
           onEnded={() => setIsPlaying(false)}
           onTimeUpdate={() => {
             if (audioRef.current) {

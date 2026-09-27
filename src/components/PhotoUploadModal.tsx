@@ -289,6 +289,7 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({
                 <img
                   src={previewUrl}
                   alt="Photo Preview"
+                  decoding="async"
                   className="w-full h-[180px] object-cover object-center"
                 />
                 <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-black/70 text-[10px] text-[#D4AF37] font-cinzel uppercase border border-[#D4AF37]/30">

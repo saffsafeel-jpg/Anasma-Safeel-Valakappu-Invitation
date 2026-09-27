@@ -26,6 +26,8 @@ export const CouplePhotoVisual: React.FC<CouplePhotoVisualProps> = ({
         <img
           src={customUrl}
           alt={alt}
+          decoding="async"
+          loading="eager"
           referrerPolicy="no-referrer"
           onError={() => setImageError(true)}
           className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"

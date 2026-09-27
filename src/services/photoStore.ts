@@ -1,5 +1,7 @@
-// Photo storage service: manages custom uploaded couple photos with server persistence and local caching
+// Photo storage service: manages permanent static couple photos and local caching
 import { CouplePhoto } from '../types';
+
+export const STATIC_COUPLE_PHOTO = '/assets/couple_photo.jpg';
 
 export const DEFAULT_PHOTOS: CouplePhoto[] = [
   {
@@ -7,7 +9,7 @@ export const DEFAULT_PHOTOS: CouplePhoto[] = [
     title: 'Valakappu Invitation Cover',
     subtitle: 'Anasma & Safeel',
     caption: 'Celebrating new beginnings & honoring parents-to-be on Sunday, 04th October 2026.',
-    url: 'https://i.pinimg.com/736x/d1/0a/0a/d10a0a2ea93b0b9b586ba735814113c4.jpg?nii=t',
+    url: '/assets/couple_photo.jpg',
     defaultVisual: 'couple_cover',
   },
   {
@@ -15,7 +17,7 @@ export const DEFAULT_PHOTOS: CouplePhoto[] = [
     title: 'Anasma & Safeel',
     subtitle: 'The Parents-To-Be',
     caption: 'Celebrating new beginnings & the sweetest blessing on the way.',
-    url: 'https://i.pinimg.com/736x/83/86/dc/8386dcfd42c06165cce0b58a809f6049.jpg?nii=t',
+    url: '/assets/couple_photo.jpg',
     defaultVisual: 'couple_hero',
   },
   {
@@ -23,7 +25,7 @@ export const DEFAULT_PHOTOS: CouplePhoto[] = [
     title: 'Sacred Valakappu Ritual',
     subtitle: 'Bangles of Blessing & Protection',
     caption: 'Adorning the mother-to-be with auspicious bangles for health, protection and joy.',
-    url: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=80',
+    url: '/assets/ritual.jpg',
     defaultVisual: 'bangles_ritual',
   },
   {
@@ -31,7 +33,7 @@ export const DEFAULT_PHOTOS: CouplePhoto[] = [
     title: 'Joy & Felicitations',
     subtitle: 'Cherished Memories',
     caption: 'Smiling hearts, warm embraces, and endless blessings from family and friends.',
-    url: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1200&q=80',
+    url: '/assets/felicitation.jpg',
     defaultVisual: 'felicitation',
   },
   {
@@ -39,7 +41,7 @@ export const DEFAULT_PHOTOS: CouplePhoto[] = [
     title: 'Sunset Into Dusk',
     subtitle: 'A Lifetime of Love',
     caption: 'Two hearts beating in harmony under the golden evening sky, awaiting our little miracle.',
-    url: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1200&q=80',
+    url: '/assets/dusk.jpg',
     defaultVisual: 'dusk_embrace',
   },
   {
@@ -47,14 +49,23 @@ export const DEFAULT_PHOTOS: CouplePhoto[] = [
     title: 'Udaya Resort, Palakkad',
     subtitle: 'West Yakkara, Kerala',
     caption: 'A serene and elegant resort backdrop for this sacred celebration.',
-    url: 'https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&w=1200&q=80',
+    url: '/assets/venue.jpg',
     defaultVisual: 'venue',
   },
 ];
 
-const LOCAL_STORAGE_KEY = 'valakappu_custom_photos_v1';
+const LOCAL_STORAGE_KEY = 'valakappu_custom_photos_v2';
 const LISTENERS: Array<() => void> = [];
-const MEMORY_PHOTOS: Record<string, string> = {};
+
+// Pre-populated static in-memory photos: ZERO network latency on initial render
+const MEMORY_PHOTOS: Record<string, string> = {
+  cover: '/assets/couple_photo.jpg',
+  hero: '/assets/couple_photo.jpg',
+  ritual: '/assets/ritual.jpg',
+  felicitation: '/assets/felicitation.jpg',
+  dusk: '/assets/dusk.jpg',
+  venue: '/assets/venue.jpg',
+};
 
 export function subscribeToPhotos(callback: () => void) {
   LISTENERS.push(callback);
@@ -74,62 +85,37 @@ function notifyListeners() {
   });
 }
 
-// Safely save to localStorage without throwing QuotaExceededError
 function safeSetLocalStorage(data: Record<string, string>) {
   try {
     const safeData: Record<string, string> = {};
     for (const [k, v] of Object.entries(data)) {
       if (typeof v === 'string') {
-        // Only keep URLs or small thumbnails in localStorage (< 80KB)
         if (!v.startsWith('data:image/') || v.length < 80000) {
           safeData[k] = v;
         }
       }
     }
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(safeData));
-  } catch (quotaError) {
-    console.warn('localStorage quota warning, continuing in memory:', quotaError);
-    try {
-      localStorage.removeItem(LOCAL_STORAGE_KEY);
-    } catch {
-      // ignore
-    }
+  } catch {
+    // ignore
   }
 }
 
-// Fetch photos from server & sync
-export async function initPhotosSync(): Promise<Record<string, string>> {
-  let localData: Record<string, string> = {};
+// Zero-latency synchronous initialization: reads local storage if present, no API blocking
+export function initPhotosSync(): Promise<Record<string, string>> {
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (raw) {
-      localData = JSON.parse(raw);
+      const localData = JSON.parse(raw);
       Object.assign(MEMORY_PHOTOS, localData);
     }
-  } catch (e) {
-    console.warn('Could not read photos from localStorage', e);
+  } catch {
+    // ignore
   }
-
-  try {
-    const res = await fetch('/api/photos');
-    if (res.ok) {
-      const data = await res.json();
-      if (data.photos && Object.keys(data.photos).length > 0) {
-        const merged = { ...localData, ...data.photos };
-        Object.assign(MEMORY_PHOTOS, merged);
-        safeSetLocalStorage(merged);
-        notifyListeners();
-        return merged;
-      }
-    }
-  } catch (e) {
-    console.warn('Could not fetch photos from server', e);
-  }
-
-  return { ...MEMORY_PHOTOS };
+  return Promise.resolve({ ...MEMORY_PHOTOS });
 }
 
-export function getCustomPhoto(photoId: string): string | null {
+export function getCustomPhoto(photoId: string): string {
   // 1. Check in-memory store
   if (MEMORY_PHOTOS[photoId]) {
     return MEMORY_PHOTOS[photoId];
@@ -145,22 +131,20 @@ export function getCustomPhoto(photoId: string): string | null {
         return obj[photoId];
       }
     }
-  } catch (e) {
-    console.warn(e);
+  } catch {
+    // ignore
   }
 
-  // 3. Check default photos
+  // 3. Fallback to static local asset
   const defaultItem = DEFAULT_PHOTOS.find((p) => p.id === photoId);
-  return defaultItem?.url || null;
+  return defaultItem?.url || '/assets/couple_photo.jpg';
 }
 
 export async function saveCustomPhoto(photoId: string, photoDataUrl: string): Promise<boolean> {
   try {
-    // 1. Always update in-memory cache and notify UI immediately
     MEMORY_PHOTOS[photoId] = photoDataUrl;
     notifyListeners();
 
-    // 2. Safely attempt local storage persistence
     let current: Record<string, string> = {};
     try {
       const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -173,21 +157,9 @@ export async function saveCustomPhoto(photoId: string, photoDataUrl: string): Pr
     current[photoId] = photoDataUrl;
     safeSetLocalStorage(current);
 
-    // 3. Persist to server (handles large data and survives browser cache clear)
-    try {
-      await fetch('/api/photos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ photoId, photoData: photoDataUrl }),
-      });
-    } catch (err) {
-      console.warn('Server photo sync failed:', err);
-    }
-
     return true;
   } catch (e) {
     console.error('Failed to save photo:', e);
-    // Since in-memory was updated, still return true to keep user flow smooth
     return true;
   }
 }
@@ -195,19 +167,21 @@ export async function saveCustomPhoto(photoId: string, photoDataUrl: string): Pr
 export async function resetCustomPhotos(): Promise<boolean> {
   try {
     Object.keys(MEMORY_PHOTOS).forEach((k) => delete MEMORY_PHOTOS[k]);
+    MEMORY_PHOTOS['cover'] = '/assets/couple_photo.jpg';
+    MEMORY_PHOTOS['hero'] = '/assets/couple_photo.jpg';
+    MEMORY_PHOTOS['ritual'] = '/assets/ritual.jpg';
+    MEMORY_PHOTOS['felicitation'] = '/assets/felicitation.jpg';
+    MEMORY_PHOTOS['dusk'] = '/assets/dusk.jpg';
+    MEMORY_PHOTOS['venue'] = '/assets/venue.jpg';
+
     try {
       localStorage.removeItem(LOCAL_STORAGE_KEY);
     } catch {
       // ignore
     }
     notifyListeners();
-
-    fetch('/api/photos', { method: 'DELETE' }).catch((err) =>
-      console.warn('Server photo reset failed:', err)
-    );
     return true;
-  } catch (e) {
-    console.error(e);
+  } catch {
     return false;
   }
 }
