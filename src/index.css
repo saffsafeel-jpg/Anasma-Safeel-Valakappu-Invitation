@@ -44,18 +44,24 @@
   backface-visibility: hidden;
 }
 
-/* Custom gold gradient */
+/* Aesthetic Pastel Terracotta & Warm Rose Gradient text */
 .gold-gradient-text {
-  background: linear-gradient(135deg, #D4AF37 0%, #FFF3B0 45%, #E5C378 70%, #AA7C11 100%);
+  background: linear-gradient(135deg, #7C3A2D 0%, #B85D43 40%, #C27D66 70%, #8C4736 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.pastel-terracotta-text {
+  background: linear-gradient(135deg, #8E443D 0%, #D97D64 45%, #C27D66 70%, #945242 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .gold-gradient-border {
-  border-image: linear-gradient(135deg, #D4AF37, #FFF3B0, #AA7C11) 1;
+  border-image: linear-gradient(135deg, #D97D64, #F2C4B3, #C59B27) 1;
 }
 
-/* Shimmer animation for gold wax seal and buttons */
+/* Shimmer animation for wax seal and buttons */
 @keyframes shimmer {
   0% { transform: translateX(-100%) rotate(45deg); }
   100% { transform: translateX(200%) rotate(45deg); }
@@ -79,10 +85,10 @@
   width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #0B1325;
+  background: #F4ECE1;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D4AF37;
+  background: #D97D64;
   border-radius: 9999px;
 }
 
@@ -124,5 +130,3 @@
   transform-origin: bottom;
   will-change: transform;
 }
-
-

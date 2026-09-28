@@ -20,21 +20,21 @@ function ValakappuAppContent() {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   return (
-    <div className="min-h-screen w-full bg-[#050912] flex justify-center items-start sm:py-6 sm:px-4 text-[#FAF8F5]">
-      {/* Desktop background ambient lighting (Zero GPU blur overhead) */}
-      <div className="fixed inset-0 pointer-events-none opacity-40 overflow-hidden">
-        <div className="absolute top-10 left-1/4 w-[420px] h-[420px] bg-[radial-gradient(circle,rgba(212,175,55,0.12)_0%,transparent_70%)]" />
-        <div className="absolute bottom-10 right-1/4 w-[450px] h-[450px] bg-[radial-gradient(circle,rgba(18,27,47,0.7)_0%,transparent_70%)]" />
+    <div className="min-h-screen w-full bg-[#F4ECE1] flex justify-center items-start sm:py-6 sm:px-4 text-[#2E1E14]">
+      {/* Desktop background ambient lighting (Aesthetic Pastel Glows) */}
+      <div className="fixed inset-0 pointer-events-none opacity-60 overflow-hidden">
+        <div className="absolute top-10 left-1/4 w-[420px] h-[420px] bg-[radial-gradient(circle,rgba(226,149,120,0.18)_0%,transparent_70%)]" />
+        <div className="absolute bottom-10 right-1/4 w-[450px] h-[450px] bg-[radial-gradient(circle,rgba(197,155,39,0.14)_0%,transparent_70%)]" />
       </div>
 
       {/* Mobile-First Frame Container (Strictly max-w-[480px]) */}
       <main
         ref={containerRef}
-        className="relative w-full max-w-[480px] min-h-screen sm:min-h-[92vh] sm:rounded-[36px] bg-[#0B1325] shadow-[0_25px_70px_rgba(0,0,0,0.85)] sm:border-[6px] sm:border-[#1C2840] overflow-x-hidden overflow-y-auto flex flex-col z-10"
+        className="relative w-full max-w-[480px] min-h-screen sm:min-h-[92vh] sm:rounded-[36px] bg-[#FAF5EE] shadow-[0_20px_60px_rgba(80,50,30,0.12)] sm:border-[6px] sm:border-[#E8DACB] overflow-x-hidden overflow-y-auto flex flex-col z-10"
       >
         {/* Mobile Phone Speaker Notch / Header Indicator for Desktop Frame */}
-        <div className="hidden sm:flex justify-center pt-2 pb-1 bg-[#070D18] text-[#D4AF37] z-50">
-          <div className="w-20 h-1 rounded-full bg-white/20" />
+        <div className="hidden sm:flex justify-center pt-2 pb-1 bg-[#EFE6D8] text-[#8C5E3C] z-50">
+          <div className="w-20 h-1 rounded-full bg-[#3C2A20]/20" />
         </div>
 
         <AnimatePresence mode="wait">
@@ -55,17 +55,17 @@ function ValakappuAppContent() {
               className="w-full flex flex-col"
             >
               {/* Discrete Top Bar: Return to Cover & Event Badge */}
-              <div className="sticky top-0 z-40 px-4 py-2.5 bg-[#070D18]/90 backdrop-blur-md border-b border-[#D4AF37]/25 flex items-center justify-between">
+              <div className="sticky top-0 z-40 px-4 py-2.5 bg-[#FAF5EE]/95 backdrop-blur-md border-b border-[#E8DACB] flex items-center justify-between">
                 <button
                   onClick={() => setIsCoverOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#142038] hover:bg-[#1C2C4E] border border-[#D4AF37]/40 text-[#D4AF37] text-[11px] font-cinzel uppercase tracking-wider transition-all cursor-pointer shadow-sm"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F2E7D8] hover:bg-[#EAE0CF] border border-[#DFCBB5] text-[#8C5835] text-[11px] font-cinzel uppercase tracking-wider transition-all cursor-pointer shadow-sm"
                 >
                   <BookOpen className="w-3.5 h-3.5" />
                   <span>View Cover</span>
                 </button>
 
-                <div className="flex items-center gap-1.5 text-xs text-[#D4AF37] font-cinzel tracking-wider">
-                  <Sparkles className="w-3.5 h-3.5" />
+                <div className="flex items-center gap-1.5 text-xs text-[#8C5835] font-cinzel tracking-wider font-semibold">
+                  <Sparkles className="w-3.5 h-3.5 text-[#C86D58]" />
                   <span>Anasma &amp; Safeel</span>
                 </div>
               </div>
@@ -89,13 +89,13 @@ function ValakappuAppContent() {
               <ValakappuRsvpSection onOpenRsvpModal={() => setIsRsvpOpen(true)} />
 
               {/* Discreet Footer with Host Admin Link */}
-              <footer className="w-full py-8 px-6 bg-[#070D18] border-t border-[#D4AF37]/20 text-center space-y-3">
-                <div className="flex items-center justify-center gap-2 text-xs font-cinzel text-[#D4AF37] tracking-[0.2em] uppercase">
+              <footer className="w-full py-8 px-6 bg-[#F4ECE1] border-t border-[#E8DACB] text-center space-y-3">
+                <div className="flex items-center justify-center gap-2 text-xs font-cinzel text-[#8C5835] tracking-[0.2em] uppercase font-semibold">
                   <span>With Love &amp; Joy</span>
-                  <Heart className="w-3 h-3 fill-[#D4AF37]" />
+                  <Heart className="w-3 h-3 fill-[#C86D58] text-[#C86D58]" />
                   <span>Anasma &amp; Safeel</span>
                 </div>
-                <p className="text-[11px] text-[#FAF8F5]/50 font-montserrat">
+                <p className="text-[11px] text-[#6E5448] font-montserrat">
                   October 04, 2026 • Udaya Resort, Palakkad
                 </p>
 
@@ -103,7 +103,7 @@ function ValakappuAppContent() {
                 <div className="pt-2">
                   <button
                     onClick={() => setIsAdminOpen(true)}
-                    className="inline-flex items-center gap-1.5 text-[10px] text-[#FAF8F5]/40 hover:text-[#D4AF37] transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 text-[10px] text-[#8C7668] hover:text-[#8C5835] transition-colors cursor-pointer"
                   >
                     <FileSpreadsheet className="w-3 h-3" />
                     <span>Host RSVP Management</span>

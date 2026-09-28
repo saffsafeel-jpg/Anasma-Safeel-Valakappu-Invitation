@@ -50,67 +50,67 @@ export const ValakappuCelebrationSong: React.FC = () => {
   return (
     <section
       id="celebration-song"
-      className="relative w-full py-12 px-5 bg-gradient-to-b from-[#0E1626] via-[#10192C] to-[#0A101C] text-[#FAF8F5] overflow-hidden"
+      className="relative w-full py-12 px-5 bg-gradient-to-b from-[#FAF5EE] via-[#F6ECE0] to-[#EFE4D6] text-[#2E1E14] overflow-hidden"
     >
-      {/* Ambient background gold glow (GPU-friendly radial gradient) */}
+      {/* Ambient background gold/peach glow */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[radial-gradient(circle,rgba(212,175,55,0.14)_0%,transparent_70%)]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[radial-gradient(circle,rgba(226,149,120,0.18)_0%,transparent_70%)]" />
       </div>
 
       <div className="relative z-10 max-w-[440px] mx-auto space-y-6 text-center">
         {/* Header Pill */}
-        <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#18233C]/80 border border-[#D4AF37]/35 text-[#D4AF37] text-[11px] font-cinzel tracking-widest uppercase shadow-md">
-          <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
-          <span>Celebration MP3 Audio</span>
+        <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#F5E6D8] border border-[#E8CDB5] text-[#8C4E3A] text-[11px] font-cinzel tracking-widest uppercase shadow-sm font-semibold">
+          <Sparkles className="w-3.5 h-3.5 text-[#D97D64]" />
+          <span>Celebration Music &amp; Audio</span>
         </div>
 
         {/* Section Heading */}
         <div className="space-y-1">
-          <h2 className="font-cursive text-4xl sm:text-5xl text-[#FAF8F5] gold-gradient-text drop-shadow-[0_2px_12px_rgba(212,175,55,0.3)]">
+          <h2 className="font-cursive text-4xl sm:text-5xl gold-gradient-text py-0.5">
             Azhagu Kutti Chellam
           </h2>
-          <p className="font-serif italic text-sm text-[#D4AF37] tracking-wide">
+          <p className="font-serif italic text-sm text-[#8C5835] tracking-wide font-medium">
             {songArtist}
           </p>
         </div>
 
-        {/* ================= PURE MP3 AUDIO PLAYER CARD ================= */}
+        {/* ================= PURE AUDIO PLAYER CARD ================= */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="relative w-full rounded-3xl p-[1px] bg-gradient-to-b from-[#D4AF37]/60 via-[#AA7C11]/30 to-[#D4AF37]/15 shadow-[0_16px_40px_rgba(0,0,0,0.65)]"
+          className="relative w-full rounded-3xl p-[1px] bg-gradient-to-b from-[#E2A694]/60 via-[#E8C7B8]/40 to-[#E2A694]/30 shadow-[0_16px_40px_rgba(100,60,40,0.08)]"
         >
-          <div className="relative w-full rounded-3xl bg-gradient-to-b from-[#0E1728] to-[#080D17] p-6 space-y-6">
+          <div className="relative w-full rounded-3xl bg-[#FFFDF9] border border-[#E8DACB] p-6 space-y-6">
             {/* Centerpiece: Golden Vinyl Record & Concentric Audio Grooves */}
             <div className="relative flex flex-col items-center justify-center pt-2">
               <div
-                className={`relative w-40 h-40 sm:w-44 sm:h-44 rounded-full flex items-center justify-center p-3 bg-gradient-to-br from-[#1C263A] via-[#0C1220] to-[#141C2E] border-2 border-[#D4AF37]/50 shadow-[0_0_35px_rgba(212,175,55,0.25)] transition-transform duration-1000 ${
+                className={`relative w-40 h-40 sm:w-44 sm:h-44 rounded-full flex items-center justify-center p-3 bg-gradient-to-br from-[#EADCC9] via-[#D8C2AA] to-[#CBB096] border-2 border-[#D4A373]/60 shadow-[0_4px_25px_rgba(217,125,100,0.2)] transition-transform duration-1000 ${
                   isPlaying ? 'animate-[spin_10s_linear_infinite]' : ''
                 }`}
               >
-                {/* Concentric Gold Grooves */}
-                <div className="absolute inset-3 rounded-full border border-[#D4AF37]/20 pointer-events-none" />
-                <div className="absolute inset-6 rounded-full border border-[#D4AF37]/15 pointer-events-none" />
-                <div className="absolute inset-9 rounded-full border border-[#D4AF37]/25 pointer-events-none" />
+                {/* Concentric Grooves */}
+                <div className="absolute inset-3 rounded-full border border-[#8C5835]/15 pointer-events-none" />
+                <div className="absolute inset-6 rounded-full border border-[#8C5835]/10 pointer-events-none" />
+                <div className="absolute inset-9 rounded-full border border-[#8C5835]/15 pointer-events-none" />
 
                 {/* Center Label Spindle */}
-                <div className="relative w-16 h-16 rounded-full bg-gradient-to-tr from-[#B38728] via-[#FBF5B7] to-[#AA771C] flex flex-col items-center justify-center shadow-lg border border-[#FAF8F5]/40 text-[#0B1325]">
-                  <Disc3 className="w-6 h-6 text-[#0B1325]" />
-                  <span className="text-[7px] font-cinzel font-bold tracking-tighter uppercase mt-0.5">
+                <div className="relative w-16 h-16 rounded-full bg-gradient-to-tr from-[#D97D64] via-[#F7D6C8] to-[#C86D58] flex flex-col items-center justify-center shadow-md border border-white/60 text-[#2E1E14]">
+                  <Disc3 className="w-6 h-6 text-[#2E1E14]" />
+                  <span className="text-[7px] font-cinzel font-bold tracking-tighter uppercase mt-0.5 text-[#2E1E14]">
                     A &amp; S 2026
                   </span>
-                  <div className="absolute w-2 h-2 rounded-full bg-[#0B1325] border border-white/50" />
+                  <div className="absolute w-2 h-2 rounded-full bg-white border border-[#2E1E14]/30" />
                 </div>
               </div>
 
-              {/* Live Dancing Equalizer Waveform (Hardware-Accelerated CSS Transforms) */}
+              {/* Live Dancing Equalizer Waveform */}
               <div className="flex items-end justify-center gap-1.5 h-7 mt-5 px-4 w-full">
                 {[1, 2, 3, 4, 1, 3, 2, 4, 2, 1, 4, 3, 1, 2, 4, 3, 1, 2, 3, 4].map((variant, i) => (
                   <span
                     key={i}
-                    className={`w-1 h-6 rounded-full bg-gradient-to-t from-[#B38728] via-[#FBF5B7] to-[#D4AF37] ${
+                    className={`w-1 h-6 rounded-full bg-gradient-to-t from-[#D97D64] via-[#E29578] to-[#C59B27] ${
                       isPlaying
                         ? `animate-eq-dance-${variant}`
                         : 'opacity-25 scale-y-[0.2] transform-origin-bottom transition-transform duration-300'
@@ -123,12 +123,12 @@ export const ValakappuCelebrationSong: React.FC = () => {
             {/* Track Info Badge */}
             <div className="space-y-1">
               <div className="flex items-center justify-center gap-2">
-                <Music className="w-4 h-4 text-[#D4AF37]" />
-                <span className="font-cinzel text-base font-bold text-[#FAF8F5] tracking-wider">
+                <Music className="w-4 h-4 text-[#D97D64]" />
+                <span className="font-cinzel text-base font-bold text-[#2E1E14] tracking-wider">
                   {customFileName ? customFileName.replace(/\.[^/.]+$/, '') : songTitle}
                 </span>
               </div>
-              <p className="font-montserrat text-xs text-[#D4AF37]">
+              <p className="font-montserrat text-xs text-[#8C5835] font-medium">
                 {customFileName ? 'Custom Selected MP3 Track' : songArtist}
               </p>
             </div>
@@ -142,67 +142,60 @@ export const ValakappuCelebrationSong: React.FC = () => {
                   max={duration}
                   value={currentTime}
                   onChange={(e) => seekTo(Number(e.target.value))}
-                  className="w-full h-1.5 bg-[#1C283E] rounded-lg appearance-none cursor-pointer accent-[#D4AF37]"
+                  className="w-full h-1.5 bg-[#EAE0D3] rounded-lg appearance-none cursor-pointer accent-[#D97D64]"
                 />
               </div>
-
-              <div className="flex items-center justify-between text-[11px] font-montserrat text-[#FAF8F5]/60 font-light px-0.5">
+              <div className="flex justify-between items-center text-[11px] font-montserrat text-[#6E5448] font-medium px-0.5">
                 <span>{formatTime(currentTime)}</span>
-                <span className="text-[#D4AF37]/70 font-cinzel text-[10px]">MP3 AUDIO</span>
                 <span>{formatTime(duration)}</span>
               </div>
             </div>
 
-            {/* Primary Audio Transport Controls */}
-            <div className="flex items-center justify-center gap-6 pt-1">
-              {/* Skip Back 10s */}
+            {/* Playback Primary Controls */}
+            <div className="flex items-center justify-center gap-5 pt-1">
+              {/* Skip backward 10s */}
               <button
-                onClick={() => seekTo(currentTime - 10)}
-                className="p-2.5 rounded-full text-[#FAF8F5]/70 hover:text-[#D4AF37] hover:bg-[#162136] transition-all cursor-pointer"
+                onClick={() => seekTo(Math.max(0, currentTime - 10))}
+                className="p-2.5 rounded-full bg-[#F5E6D8] border border-[#E8CDB5] text-[#8C5835] hover:text-[#2E1E14] active:scale-95 transition-all cursor-pointer shadow-sm"
                 title="Rewind 10 seconds"
-                aria-label="Rewind 10 seconds"
               >
-                <RotateCcw className="w-5 h-5" />
+                <RotateCcw className="w-4 h-4" />
               </button>
 
-              {/* Master Circular Play / Pause Button */}
+              {/* Master Play / Pause Button */}
               <button
                 onClick={togglePlay}
-                className="relative p-5 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#FFF0A5] to-[#C59B35] text-[#0B1325] shadow-[0_0_30px_rgba(212,175,55,0.45)] hover:scale-105 active:scale-95 transition-all cursor-pointer group"
-                title={isPlaying ? 'Pause MP3' : 'Play MP3'}
-                aria-label={isPlaying ? 'Pause Celebration MP3' : 'Play Celebration MP3'}
+                className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#D97D64] to-[#C86D58] text-white flex items-center justify-center shadow-[0_6px_25px_rgba(217,125,100,0.35)] hover:scale-105 active:scale-95 transition-all cursor-pointer border border-[#FFF0E6]"
+                title={isPlaying ? 'Pause celebration music' : 'Play celebration music'}
               >
-                {/* Glow ring */}
-                <span className="absolute inset-0 rounded-full border border-white/40 pointer-events-none" />
                 {isPlaying ? (
-                  <Pause className="w-7 h-7 fill-[#0B1325]" />
+                  <Pause className="w-6 h-6 fill-white text-white" />
                 ) : (
-                  <Play className="w-7 h-7 fill-[#0B1325] ml-1" />
+                  <Play className="w-6 h-6 fill-white text-white ml-0.5" />
                 )}
               </button>
 
-              {/* Skip Forward 10s */}
+              {/* Skip forward 10s */}
               <button
-                onClick={() => seekTo(currentTime + 10)}
-                className="p-2.5 rounded-full text-[#FAF8F5]/70 hover:text-[#D4AF37] hover:bg-[#162136] transition-all cursor-pointer"
-                title="Forward 10 seconds"
-                aria-label="Forward 10 seconds"
+                onClick={() => seekTo(Math.min(duration, currentTime + 10))}
+                className="p-2.5 rounded-full bg-[#F5E6D8] border border-[#E8CDB5] text-[#8C5835] hover:text-[#2E1E14] active:scale-95 transition-all cursor-pointer shadow-sm"
+                title="Fast forward 10 seconds"
               >
-                <RotateCw className="w-5 h-5" />
+                <RotateCw className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Bottom Row: Volume Slider & Optional MP3 File Selector */}
-            <div className="pt-3 border-t border-[#D4AF37]/20 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+            {/* Volume & Custom Audio Controls Bar */}
+            <div className="pt-2 border-t border-[#E8DACB] flex items-center justify-between text-xs px-1">
               {/* Volume Slider */}
-              <div className="flex items-center gap-2 w-full sm:w-auto">
+              <div className="flex items-center gap-2">
                 <button
                   onClick={toggleMute}
-                  className="text-[#D4AF37] hover:text-[#FFF3B0] transition-colors cursor-pointer"
+                  className="text-[#8C5835] hover:text-[#D97D64] transition-colors cursor-pointer"
                   title={isMuted ? 'Unmute' : 'Mute'}
                 >
                   {isMuted || volume === 0 ? (
-                    <VolumeX className="w-4 h-4 text-red-400" />
+                    <VolumeX className="w-4 h-4 text-red-500" />
                   ) : (
                     <Volume2 className="w-4 h-4" />
                   )}
@@ -213,10 +206,10 @@ export const ValakappuCelebrationSong: React.FC = () => {
                   max={100}
                   value={isMuted ? 0 : volume}
                   onChange={(e) => setVolume(Number(e.target.value))}
-                  className="w-24 h-1 bg-[#1C283E] rounded-lg appearance-none cursor-pointer accent-[#D4AF37]"
+                  className="w-24 h-1 bg-[#EAE0D3] rounded-lg appearance-none cursor-pointer accent-[#D97D64]"
                   title="Volume"
                 />
-                <span className="text-[10px] text-[#FAF8F5]/60 font-montserrat w-7 text-right">
+                <span className="text-[10px] text-[#6E5448] font-montserrat w-7 text-right font-medium">
                   {isMuted ? '0%' : `${volume}%`}
                 </span>
               </div>
@@ -232,17 +225,17 @@ export const ValakappuCelebrationSong: React.FC = () => {
                 />
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#142038] hover:bg-[#1C2C4E] border border-[#D4AF37]/35 text-[#D4AF37] text-[11px] font-cinzel transition-all cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F5E6D8] hover:bg-[#EFE0CE] border border-[#E8CDB5] text-[#8C5835] text-[11px] font-cinzel transition-all cursor-pointer font-semibold shadow-sm"
                   title="Choose local MP3 file from your device"
                 >
                   {customFileName ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
                       <span className="truncate max-w-[130px]">MP3 Loaded</span>
                     </>
                   ) : (
                     <>
-                      <Upload className="w-3.5 h-3.5 text-[#D4AF37]" />
+                      <Upload className="w-3.5 h-3.5 text-[#D97D64]" />
                       <span>Use Own MP3</span>
                     </>
                   )}
@@ -251,12 +244,12 @@ export const ValakappuCelebrationSong: React.FC = () => {
             </div>
 
             {/* Quick Link to Official Music Track */}
-            <div className="pt-2 text-center">
+            <div className="pt-1 text-center">
               <a
                 href="https://www.youtube.com/watch?v=vSJN0JFF0yo"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-[11px] text-[#D4AF37]/80 hover:text-[#FFF3B0] transition-colors underline underline-offset-4 decoration-[#D4AF37]/40"
+                className="inline-flex items-center gap-1.5 text-[11px] text-[#8C5835] hover:text-[#D97D64] transition-colors underline underline-offset-4 decoration-[#D97D64]/40 font-medium"
               >
                 <span>Listen to Full Original Track on YouTube</span>
                 <span className="text-[10px]">↗</span>

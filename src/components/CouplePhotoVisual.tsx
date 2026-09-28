@@ -22,7 +22,7 @@ export const CouplePhotoVisual: React.FC<CouplePhotoVisualProps> = ({
   // If user provided a custom photo that didn't error out, display it
   if (customUrl && !imageError) {
     return (
-      <div className={`relative w-full h-full overflow-hidden bg-[#0A101C] ${className}`}>
+      <div className={`relative w-full h-full overflow-hidden bg-[#FAF5EE] ${className}`}>
         <img
           src={customUrl}
           alt={alt}
@@ -33,8 +33,8 @@ export const CouplePhotoVisual: React.FC<CouplePhotoVisualProps> = ({
           onError={() => setImageError(true)}
           className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
         />
-        {/* Soft vignette overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1325]/80 via-transparent to-black/20 pointer-events-none" />
+        {/* Soft pastel vignette overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#FAF5EE]/90 via-transparent to-black/10 pointer-events-none" />
       </div>
     );
   }
@@ -42,11 +42,11 @@ export const CouplePhotoVisual: React.FC<CouplePhotoVisualProps> = ({
   // Cover Portrait: Majestic Night Silhouette & Royal Maternity
   if (visualType === 'couple_cover') {
     return (
-      <div className={`relative w-full h-full overflow-hidden bg-gradient-to-b from-[#060D1A] via-[#09152B] to-[#040810] flex items-center justify-center ${className}`}>
-        {/* Starry Night Sky Ambient Backing */}
-        <div className="absolute inset-0 bg-[radial-gradient(#FAF8F5_1px,transparent_1px)] [background-size:20px_20px] opacity-20 pointer-events-none" />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-72 h-72 bg-[#D4AF37]/25 rounded-full blur-[75px] pointer-events-none" />
-        <div className="absolute bottom-4 inset-x-0 h-32 bg-gradient-to-t from-[#0B1325] to-transparent pointer-events-none" />
+      <div className={`relative w-full h-full overflow-hidden bg-gradient-to-b from-[#2E1E14] via-[#3C281C] to-[#1E130B] flex items-center justify-center ${className}`}>
+        {/* Shimmer Ambient Backing */}
+        <div className="absolute inset-0 bg-[radial-gradient(#F5E6D8_1px,transparent_1px)] [background-size:20px_20px] opacity-25 pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-72 h-72 bg-[radial-gradient(circle,rgba(226,149,120,0.3)_0%,transparent_70%)] pointer-events-none" />
+        <div className="absolute bottom-4 inset-x-0 h-32 bg-gradient-to-t from-[#FAF5EE] to-transparent pointer-events-none" />
 
         {/* Full vector artwork of Anasma & Safeel on the cover */}
         <svg

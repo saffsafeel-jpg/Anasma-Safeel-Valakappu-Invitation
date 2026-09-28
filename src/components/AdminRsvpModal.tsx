@@ -303,7 +303,7 @@ function handleRsvp(e) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-[#070D18]/80 backdrop-blur-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-[#2E1E14]/50 backdrop-blur-sm">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -317,26 +317,26 @@ function handleRsvp(e) {
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.94, opacity: 0, y: 15 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-3xl max-h-[90vh] bg-[#0E172E] text-[#FAF8F5] rounded-3xl border border-[#D4AF37]/40 shadow-2xl overflow-hidden z-10 flex flex-col"
+            className="relative w-full max-w-3xl max-h-[90vh] bg-[#FAF5EE] text-[#2E1E14] rounded-3xl border border-[#E8DACB] shadow-2xl overflow-hidden z-10 flex flex-col"
           >
             {/* Modal Header */}
-            <div className="bg-[#121D36] text-[#FAF8F5] px-6 py-4 flex items-center justify-between border-b border-[#D4AF37]/30">
+            <div className="bg-[#F5E6D8] text-[#2E1E14] px-6 py-4 flex items-center justify-between border-b border-[#E8DACB]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#0E172E] border border-[#D4AF37] flex items-center justify-center shadow-[0_0_12px_rgba(212,175,55,0.35)]">
-                  <FileSpreadsheet className="w-5 h-5 text-[#D4AF37]" />
+                <div className="w-10 h-10 rounded-full bg-white border border-[#E8DACB] flex items-center justify-center shadow-sm">
+                  <FileSpreadsheet className="w-5 h-5 text-[#D97D64]" />
                 </div>
                 <div>
-                  <h3 className="font-cinzel text-lg sm:text-xl font-bold tracking-wide">
+                  <h3 className="font-cinzel text-lg sm:text-xl font-bold tracking-wide text-[#2E1E14]">
                     RSVP Dashboard &amp; Google Sheets
                   </h3>
-                  <p className="font-serif italic text-xs text-[#D4AF37]">
+                  <p className="font-serif italic text-xs text-[#8C5835]">
                     Anasma &amp; Safeel · Valakappu Ceremony
                   </p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-full bg-[#18253F] hover:bg-[#203152] text-[#FAF8F5] flex items-center justify-center transition-colors"
+                className="w-8 h-8 rounded-full bg-white hover:bg-[#F2E7D8] text-[#5A4234] flex items-center justify-center transition-colors cursor-pointer border border-[#E8DACB]"
                 aria-label="Close dashboard"
               >
                 <X className="w-4 h-4" />
@@ -346,7 +346,7 @@ function handleRsvp(e) {
             {/* Content Body */}
             <div className="p-4 sm:p-6 overflow-y-auto space-y-5">
               {/* GOOGLE SHEETS LIVE INTEGRATION CARD */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-[#142038] border border-[#D4AF37]/30 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E8DACB] shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <span className="font-cinzel text-sm font-semibold text-[#D4AF37] tracking-wide">
@@ -359,7 +359,7 @@ function handleRsvp(e) {
                   <p className="text-xs text-[#FAF8F5]/80 font-montserrat max-w-md break-all">
                     Submissions stream directly to your Google Sheet:
                     <br />
-                    <span className="font-mono text-[11px] text-[#D4AF37] font-medium">
+                    <span className="font-mono text-[11px] text-[#8C5835] font-medium">
                       1tLBP0EDUoWFI-zjnaauMUAZAVZgdQXdTmygZQv5xPOc
                     </span>
                   </p>
@@ -370,7 +370,7 @@ function handleRsvp(e) {
                     href={sheetInfo.sheetUrl || DEFAULT_SHEET_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#C5A059] text-[#0B1325] text-xs font-cinzel tracking-wider uppercase font-bold hover:brightness-110 shadow transition-all"
+                    className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#D97D64] via-[#E29578] to-[#C86D58] text-white text-xs font-cinzel tracking-wider uppercase font-bold hover:brightness-105 shadow transition-all cursor-pointer"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     <span>Open Sheet</span>
@@ -379,10 +379,10 @@ function handleRsvp(e) {
                   <button
                     onClick={handleSendTestRsvp}
                     disabled={isLoading}
-                    className="inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl border border-[#D4AF37]/40 bg-[#0E1626] text-[#FAF8F5] text-xs font-montserrat hover:bg-[#18233C] transition-colors"
+                    className="inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl border border-[#E8DACB] bg-[#FAF5EE] text-[#5A4234] text-xs font-montserrat hover:bg-[#F2E7D8] transition-colors cursor-pointer"
                     title="Send a sample RSVP to verify sheet entry"
                   >
-                    <Send className="w-3 h-3 text-[#D4AF37]" />
+                    <Send className="w-3 h-3 text-[#D97D64]" />
                     <span>Test Row</span>
                   </button>
                 </div>
@@ -393,10 +393,10 @@ function handleRsvp(e) {
                 <div
                   className={`p-3 rounded-xl text-xs font-montserrat flex items-center justify-between border ${
                     statusMessage.type === 'success'
-                      ? 'bg-emerald-950/80 text-emerald-300 border-emerald-500/40'
+                      ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
                       : statusMessage.type === 'error'
-                      ? 'bg-rose-950/80 text-rose-300 border-rose-500/40'
-                      : 'bg-amber-950/80 text-amber-300 border-amber-500/40'
+                      ? 'bg-rose-50 text-rose-800 border-rose-300'
+                      : 'bg-amber-50 text-amber-800 border-amber-300'
                   }`}
                 >
                   <span>{statusMessage.text}</span>
@@ -408,66 +408,66 @@ function handleRsvp(e) {
 
               {/* STATS METRICS GRID */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="p-3.5 rounded-2xl bg-[#142038] border border-[#D4AF37]/25 text-center shadow-sm">
-                  <div className="flex items-center justify-center gap-1 text-[#D4AF37] mb-1">
-                    <Users className="w-4 h-4" />
-                    <span className="font-cinzel text-xs uppercase tracking-wider text-[#FAF8F5]/80">Total RSVPs</span>
+                <div className="p-3.5 rounded-2xl bg-white border border-[#E8DACB] text-center shadow-sm">
+                  <div className="flex items-center justify-center gap-1 text-[#8C5835] mb-1">
+                    <Users className="w-4 h-4 text-[#D97D64]" />
+                    <span className="font-cinzel text-xs uppercase tracking-wider text-[#6E5448] font-bold">Total RSVPs</span>
                   </div>
-                  <p className="font-cinzel text-2xl sm:text-3xl font-bold text-[#FAF8F5] gold-gradient-text">{totalRsvps}</p>
+                  <p className="font-cinzel text-2xl sm:text-3xl font-bold text-[#7C3A2D]">{totalRsvps}</p>
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-[#142038] border border-[#D4AF37]/40 text-center shadow-sm">
-                  <div className="flex items-center justify-center gap-1 text-emerald-400 mb-1">
-                    <UserCheck className="w-4 h-4" />
-                    <span className="font-cinzel text-xs uppercase tracking-wider text-[#FAF8F5]/80">Attending</span>
+                <div className="p-3.5 rounded-2xl bg-white border border-[#E8DACB] text-center shadow-sm">
+                  <div className="flex items-center justify-center gap-1 text-emerald-700 mb-1">
+                    <UserCheck className="w-4 h-4 text-emerald-600" />
+                    <span className="font-cinzel text-xs uppercase tracking-wider text-[#6E5448] font-bold">Attending</span>
                   </div>
-                  <p className="font-cinzel text-2xl sm:text-3xl font-bold text-emerald-400">{totalAttendingGuests}</p>
-                  <p className="text-[10px] text-[#FAF8F5]/60 font-montserrat">({attendingRsvps.length} parties)</p>
+                  <p className="font-cinzel text-2xl sm:text-3xl font-bold text-emerald-700">{totalAttendingGuests}</p>
+                  <p className="text-[10px] text-[#6E5448] font-montserrat">({attendingRsvps.length} parties)</p>
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-[#142038] border border-[#D4AF37]/25 text-center shadow-sm">
-                  <div className="flex items-center justify-center gap-1 text-rose-400 mb-1">
-                    <UserX className="w-4 h-4" />
-                    <span className="font-cinzel text-xs uppercase tracking-wider text-[#FAF8F5]/80">Declined</span>
+                <div className="p-3.5 rounded-2xl bg-white border border-[#E8DACB] text-center shadow-sm">
+                  <div className="flex items-center justify-center gap-1 text-rose-700 mb-1">
+                    <UserX className="w-4 h-4 text-rose-600" />
+                    <span className="font-cinzel text-xs uppercase tracking-wider text-[#6E5448] font-bold">Declined</span>
                   </div>
-                  <p className="font-cinzel text-2xl sm:text-3xl font-bold text-rose-400">{declinedCount}</p>
+                  <p className="font-cinzel text-2xl sm:text-3xl font-bold text-rose-700">{declinedCount}</p>
                 </div>
               </div>
 
               {/* SEARCH & FILTERS BAR */}
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-1">
                 <div className="relative flex-1">
-                  <Search className="w-3.5 h-3.5 text-[#D4AF37] absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Search className="w-3.5 h-3.5 text-[#8C5835] absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     placeholder="Search guest name or wishes..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-8 pr-3 py-1.5 rounded-xl border border-[#D4AF37]/30 bg-[#121B2F] text-xs text-[#FAF8F5] placeholder:text-[#FAF8F5]/40 focus:outline-none focus:border-[#D4AF37]"
+                    className="w-full pl-8 pr-3 py-1.5 rounded-xl border border-[#E8DACB] bg-white text-xs text-[#2E1E14] placeholder:text-[#8C7668]/60 focus:outline-none focus:border-[#D97D64]"
                   />
                 </div>
 
-                <div className="flex items-center gap-1 bg-[#121B2F] p-1 rounded-xl border border-[#D4AF37]/20 text-xs">
+                <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-[#E8DACB] text-xs">
                   <button
                     onClick={() => setActiveFilter('all')}
-                    className={`px-3 py-1 rounded-lg font-cinzel transition-all ${
-                      activeFilter === 'all' ? 'bg-[#D4AF37] text-[#0B1325] font-bold shadow-sm' : 'text-[#FAF8F5]/70 hover:bg-white/10'
+                    className={`px-3 py-1 rounded-lg font-cinzel transition-all cursor-pointer ${
+                      activeFilter === 'all' ? 'bg-[#D97D64] text-white font-bold shadow-sm' : 'text-[#6E5448] hover:bg-[#FAF5EE]'
                     }`}
                   >
                     All ({totalRsvps})
                   </button>
                   <button
                     onClick={() => setActiveFilter('accept')}
-                    className={`px-3 py-1 rounded-lg font-cinzel transition-all ${
-                      activeFilter === 'accept' ? 'bg-[#D4AF37] text-[#0B1325] font-bold shadow-sm' : 'text-[#FAF8F5]/70 hover:bg-white/10'
+                    className={`px-3 py-1 rounded-lg font-cinzel transition-all cursor-pointer ${
+                      activeFilter === 'accept' ? 'bg-[#D97D64] text-white font-bold shadow-sm' : 'text-[#6E5448] hover:bg-[#FAF5EE]'
                     }`}
                   >
                     Attending ({attendingRsvps.length})
                   </button>
                   <button
                     onClick={() => setActiveFilter('decline')}
-                    className={`px-3 py-1 rounded-lg font-cinzel transition-all ${
-                      activeFilter === 'decline' ? 'bg-[#D4AF37] text-[#0B1325] font-bold shadow-sm' : 'text-[#FAF8F5]/70 hover:bg-white/10'
+                    className={`px-3 py-1 rounded-lg font-cinzel transition-all cursor-pointer ${
+                      activeFilter === 'decline' ? 'bg-[#D97D64] text-white font-bold shadow-sm' : 'text-[#6E5448] hover:bg-[#FAF5EE]'
                     }`}
                   >
                     Declined ({declinedCount})
@@ -476,26 +476,26 @@ function handleRsvp(e) {
 
                 <button
                   onClick={handleExportCSV}
-                  className="inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-xl border border-[#D4AF37] bg-[#121B2F] text-[#D4AF37] text-xs font-cinzel hover:bg-[#18233C] transition-colors"
+                  className="inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-xl border border-[#E8DACB] bg-white text-[#8C5835] text-xs font-cinzel hover:bg-[#FAF5EE] transition-colors cursor-pointer shadow-sm"
                   title="Download CSV spreadsheet"
                 >
-                  <Download className="w-3.5 h-3.5 text-[#D4AF37]" />
+                  <Download className="w-3.5 h-3.5 text-[#D97D64]" />
                   <span>CSV</span>
                 </button>
               </div>
 
               {/* SUBMISSIONS TABLE */}
-              <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#121B2F] overflow-hidden shadow-sm">
+              <div className="rounded-2xl border border-[#E8DACB] bg-white overflow-hidden shadow-sm">
                 <div className="max-h-[260px] overflow-y-auto">
                   {filteredRsvps.length === 0 ? (
-                    <div className="py-10 text-center text-[#FAF8F5]/60 space-y-2">
-                      <FileSpreadsheet className="w-8 h-8 text-[#D4AF37]/50 mx-auto" />
-                      <p className="font-cinzel text-sm">No RSVP submissions yet.</p>
+                    <div className="py-10 text-center text-[#6E5448] space-y-2">
+                      <FileSpreadsheet className="w-8 h-8 text-[#D97D64]/50 mx-auto" />
+                      <p className="font-cinzel text-sm font-semibold">No RSVP submissions yet.</p>
                       <p className="text-xs font-montserrat">Guest RSVPs submitted through the form will appear here and in your Google Sheet.</p>
                     </div>
                   ) : (
                     <table className="w-full text-left text-xs">
-                      <thead className="bg-[#18253F] text-[#D4AF37] font-cinzel uppercase tracking-wider sticky top-0 border-b border-[#D4AF37]/30">
+                      <thead className="bg-[#F4ECE1] text-[#8C4E3A] font-cinzel uppercase tracking-wider sticky top-0 border-b border-[#E8DACB]">
                         <tr>
                           <th className="py-2.5 px-3 font-semibold">Guest Name</th>
                           <th className="py-2.5 px-3 font-semibold">Status</th>
@@ -504,31 +504,31 @@ function handleRsvp(e) {
                           <th className="py-2.5 px-3 font-semibold">Submitted</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-[#D4AF37]/20 font-montserrat">
+                      <tbody className="divide-y divide-[#E8DACB] font-montserrat">
                         {filteredRsvps.map((rsvp) => (
-                          <tr key={rsvp.id} className="hover:bg-[#142038]/70 transition-colors">
-                            <td className="py-2.5 px-3 font-medium text-[#FAF8F5]">
+                          <tr key={rsvp.id} className="hover:bg-[#FAF5EE] transition-colors">
+                            <td className="py-2.5 px-3 font-semibold text-[#2E1E14]">
                               {rsvp.fullName}
                             </td>
                             <td className="py-2.5 px-3">
                               {rsvp.attendance === 'accept' ? (
-                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-950 text-emerald-300 border border-emerald-500/40">
+                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-300">
                                   Attending
                                 </span>
                               ) : (
-                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-rose-950 text-rose-300 border border-rose-500/40">
+                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-rose-50 text-rose-700 border border-rose-300">
                                   Declined
                                 </span>
                               )}
                             </td>
-                            <td className="py-2.5 px-3 text-[#FAF8F5] font-cinzel">
+                            <td className="py-2.5 px-3 text-[#5A4234] font-cinzel">
                               {rsvp.attendance === 'accept' ? `${rsvp.guestsCount} Guest(s)` : '-'}
                             </td>
-                            <td className="py-2.5 px-3 text-[#FAF8F5]/85 font-serif italic max-w-xs truncate">
-                              {rsvp.wishes || '-'}
+                            <td className="py-2.5 px-3 text-[#5A4234] max-w-xs truncate italic">
+                              &ldquo;{rsvp.wishes || '—'}&rdquo;
                             </td>
-                            <td className="py-2.5 px-3 text-[#FAF8F5]/50 text-[10px] whitespace-nowrap">
-                              {rsvp.timestamp}
+                            <td className="py-2.5 px-3 text-[#8C7668] whitespace-nowrap">
+                              {new Date(rsvp.timestamp).toLocaleDateString()}
                             </td>
                           </tr>
                         ))}
@@ -539,35 +539,35 @@ function handleRsvp(e) {
               </div>
 
               {/* OPTIONAL APPS SCRIPT WEBHOOK EXPANDER */}
-              <div className="rounded-2xl border border-[#D4AF37]/25 bg-[#121B2F]/60 overflow-hidden text-xs">
+              <div className="rounded-2xl border border-[#E8DACB] bg-white overflow-hidden text-xs shadow-sm">
                 <button
                   onClick={() => setShowScriptHelper(!showScriptHelper)}
-                  className="w-full px-4 py-3 flex items-center justify-between text-left font-cinzel text-[#FAF8F5] hover:bg-[#18253F] transition-colors"
+                  className="w-full px-4 py-3 flex items-center justify-between text-left font-cinzel text-[#2E1E14] hover:bg-[#FAF5EE] transition-colors cursor-pointer"
                 >
                   <div className="flex items-center gap-2">
-                    <Code2 className="w-4 h-4 text-[#D4AF37]" />
-                    <span className="font-medium">Active Google Apps Script Webhook URL</span>
+                    <Code2 className="w-4 h-4 text-[#D97D64]" />
+                    <span className="font-semibold">Active Google Apps Script Webhook URL</span>
                   </div>
-                  <span className="text-[11px] text-[#D4AF37] uppercase tracking-wider">
+                  <span className="text-[11px] text-[#8C5835] uppercase tracking-wider font-bold">
                     {showScriptHelper ? 'Hide Config ▲' : 'View Config ▼'}
                   </span>
                 </button>
 
                 {showScriptHelper && (
-                  <div className="p-4 pt-2 border-t border-[#D4AF37]/20 space-y-3 font-montserrat text-[#FAF8F5]/80">
+                  <div className="p-4 pt-2 border-t border-[#E8DACB] space-y-3 font-montserrat text-[#5A4234]">
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-1">
                       <input
                         type="url"
                         placeholder="https://script.google.com/macros/s/.../exec"
                         value={customWebhook}
                         onChange={(e) => setCustomWebhook(e.target.value)}
-                        className="flex-1 px-3 py-2 rounded-xl border border-[#D4AF37]/30 bg-[#0E1626] text-xs text-[#FAF8F5] focus:outline-none focus:border-[#D4AF37]"
+                        className="flex-1 px-3 py-2 rounded-xl border border-[#E8DACB] bg-white text-xs text-[#2E1E14] focus:outline-none focus:border-[#D97D64]"
                       />
                       <div className="flex items-center gap-2">
                         <button
                           onClick={handleSaveWebhook}
                           disabled={isLoading || !customWebhook.trim()}
-                          className="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl bg-[#D4AF37] text-[#0B1325] font-cinzel uppercase tracking-wider text-[11px] font-bold hover:brightness-110 transition-colors disabled:opacity-50"
+                          className="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#D97D64] via-[#E29578] to-[#C86D58] text-white font-cinzel uppercase tracking-wider text-[11px] font-bold hover:brightness-105 transition-colors disabled:opacity-50 cursor-pointer shadow-sm"
                         >
                           Save
                         </button>
@@ -588,13 +588,13 @@ function handleRsvp(e) {
             </div>
 
             {/* Modal Footer */}
-            <div className="bg-[#121D36] px-6 py-3 border-t border-[#D4AF37]/30 flex items-center justify-between text-xs text-[#FAF8F5]/70">
-              <span className="font-serif italic text-[#D4AF37]">
+            <div className="bg-[#F5E6D8] px-6 py-3 border-t border-[#E8DACB] flex items-center justify-between text-xs text-[#6E5448]">
+              <span className="font-serif italic text-[#8C5835]">
                 Google Sheet ID: 1tLBP0EDUoWFI-zjnaauMUAZAVZgdQXdTmygZQv5xPOc
               </span>
               <button
                 onClick={onClose}
-                className="px-4 py-1.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#C5A059] text-[#0B1325] font-cinzel uppercase tracking-wider text-[11px] font-bold hover:brightness-110 transition-colors"
+                className="px-4 py-1.5 rounded-full bg-gradient-to-r from-[#D97D64] via-[#E29578] to-[#C86D58] text-white font-cinzel uppercase tracking-wider text-[11px] font-bold hover:brightness-105 transition-colors cursor-pointer shadow-sm"
               >
                 Close
               </button>

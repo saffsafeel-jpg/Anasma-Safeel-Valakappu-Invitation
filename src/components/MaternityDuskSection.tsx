@@ -17,26 +17,26 @@ export const MaternityDuskSection: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative w-full py-12 px-6 bg-gradient-to-b from-[#121B2F] via-[#0E1626] to-[#0A101C] text-[#FAF8F5] overflow-hidden">
-      {/* Warm Golden Hour & Dusk Ambient Radiance (GPU-friendly radial gradients) */}
+    <section className="relative w-full py-12 px-6 bg-gradient-to-b from-[#EFE4D6] via-[#F8EFE4] to-[#FAF5EE] text-[#2E1E14] overflow-hidden">
+      {/* Warm Golden Hour & Dusk Ambient Radiance (Aesthetic Pastel Glows) */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 bg-[radial-gradient(circle,rgba(229,195,120,0.12)_0%,transparent_70%)]" />
-        <div className="absolute bottom-10 right-4 w-60 h-60 bg-[radial-gradient(circle,rgba(212,175,55,0.12)_0%,transparent_70%)]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 bg-[radial-gradient(circle,rgba(226,149,120,0.18)_0%,transparent_70%)]" />
+        <div className="absolute bottom-10 right-4 w-60 h-60 bg-[radial-gradient(circle,rgba(212,163,115,0.18)_0%,transparent_70%)]" />
       </div>
 
       <div className="relative z-10 max-w-[420px] mx-auto space-y-7 text-center">
         {/* Section Pill Kicker */}
-        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#18233C]/80 border border-[#D4AF37]/30 text-[#D4AF37] text-[11px] font-cinzel tracking-widest uppercase">
-          <Sparkles className="w-3 h-3 text-[#D4AF37]" />
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#F5E6D8] border border-[#E8CDB5] text-[#8C4E3A] text-[11px] font-cinzel tracking-widest uppercase font-semibold">
+          <Sparkles className="w-3 h-3 text-[#D97D64]" />
           <span>A Journey of Love &amp; Joy</span>
         </div>
 
         {/* Heading in Script & Serif */}
         <div>
-          <h2 className="font-cursive text-4xl sm:text-5xl text-[#FAF8F5] gold-gradient-text drop-shadow-[0_2px_12px_rgba(212,175,55,0.25)]">
+          <h2 className="font-cursive text-4xl sm:text-5xl gold-gradient-text py-0.5">
             A New Little Miracle
           </h2>
-          <p className="font-serif italic text-sm text-[#D4AF37] mt-1 tracking-wide">
+          <p className="font-serif italic text-sm text-[#8C5835] mt-1 tracking-wide font-medium">
             Two hearts creating a wondrous little soul
           </p>
         </div>
@@ -49,8 +49,8 @@ export const MaternityDuskSection: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="relative w-full max-w-[320px] mx-auto flex flex-col items-center"
         >
-          <div className="relative w-full rounded-3xl p-0.5 bg-gradient-to-b from-[#D4AF37]/40 via-[#AA7C11]/20 to-transparent shadow-[0_12px_35px_rgba(0,0,0,0.6)]">
-            <div className="relative w-full h-[240px] rounded-[22px] overflow-hidden bg-gradient-to-b from-[#151F33] via-[#0E1626] to-[#080D17] flex items-center justify-center">
+          <div className="relative w-full rounded-3xl p-0.5 bg-gradient-to-b from-[#E2A694]/60 via-[#E8C7B8]/40 to-[#E2A694]/30 shadow-[0_12px_35px_rgba(100,60,40,0.1)]">
+            <div className="relative w-full h-[240px] rounded-[22px] overflow-hidden bg-[#FFFDF9] border border-[#E8DACB] flex items-center justify-center">
               <CouplePhotoVisual
                 customUrl={duskPhotoUrl}
                 visualType="dusk_embrace"
@@ -60,38 +60,55 @@ export const MaternityDuskSection: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsUploadOpen(true)}
-                className="absolute top-2.5 right-2.5 p-1.5 rounded-full bg-[#0B1325]/85 border border-[#D4AF37]/50 text-[#D4AF37] hover:scale-110 active:scale-95 transition-all shadow-md backdrop-blur-md cursor-pointer z-20"
-                title="Upload Dusk Photo"
+                className="absolute top-3 right-3 p-2 rounded-full bg-white/90 border border-[#E8DACB] text-[#8C5835] hover:scale-110 active:scale-95 transition-all shadow-md backdrop-blur-md cursor-pointer flex items-center gap-1 text-[10px] font-montserrat font-medium z-20"
+                title="Change Photo"
               >
-                <Camera className="w-3 h-3" />
+                <Camera className="w-3.5 h-3.5" />
+                <span>Change</span>
               </button>
             </div>
           </div>
         </motion.div>
 
-        {/* Heartfelt Note / Ceremony Meaning */}
-        <div className="p-5 rounded-2xl bg-[#131D33]/70 border border-[#D4AF37]/25 backdrop-blur-sm space-y-3">
-          <p className="font-serif italic text-base sm:text-lg text-[#FAF8F5] leading-relaxed">
-            &ldquo;As we step into the sacred chapter of parenthood, we seek your warmest smiles, prayers, and heartfelt blessings for our growing family.&rdquo;
+        {/* Heartfelt Note of Love & Blessings */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="p-5 rounded-2xl bg-white/95 border border-[#E8DACB] shadow-sm space-y-3"
+        >
+          <div className="flex items-center justify-center gap-2 text-[#D97D64]">
+            <Heart className="w-4 h-4 fill-[#D97D64]" />
+            <span className="font-cinzel text-xs uppercase tracking-widest text-[#8C4E3A] font-semibold">
+              Showered with Blessings
+            </span>
+            <Heart className="w-4 h-4 fill-[#D97D64]" />
+          </div>
+
+          <p className="font-serif italic text-sm text-[#4A3528] leading-relaxed">
+            &ldquo;As we await our bundle of joy, your smiles, prayers, and heartfelt blessings fill our hearts with eternal warmth and gratitude.&rdquo;
           </p>
 
-          <div className="flex items-center justify-center gap-2 pt-1 text-xs text-[#D4AF37] font-cinzel">
-            <Heart className="w-3.5 h-3.5 fill-[#D4AF37]" />
-            <span>Valakappu Tradition of Love &amp; Protection</span>
-            <Heart className="w-3.5 h-3.5 fill-[#D4AF37]" />
-          </div>
-        </div>
+          <p className="font-cinzel text-xs tracking-widest text-[#8C5835] font-semibold uppercase">
+            — Safeel &amp; Anasma
+          </p>
+        </motion.div>
       </div>
 
-      <PhotoUploadModal
-        isOpen={isUploadOpen}
-        onClose={() => setIsUploadOpen(false)}
-        photoId="dusk"
-        photoTitle="Dusk Sunset Maternity Photo"
-        currentPhotoUrl={duskPhotoUrl}
-        onPhotoSaved={(url) => setDuskPhotoUrl(url)}
-      />
+      {/* Photo Upload Modal */}
+      {isUploadOpen && (
+        <PhotoUploadModal
+          isOpen={isUploadOpen}
+          onClose={() => setIsUploadOpen(false)}
+          photoId="dusk"
+          photoTitle="Maternity Sunset Silhouette"
+          currentPhotoUrl={duskPhotoUrl || undefined}
+          onPhotoSaved={(url) => {
+            setDuskPhotoUrl(url);
+          }}
+        />
+      )}
     </section>
   );
 };
-
