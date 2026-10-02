@@ -57,15 +57,6 @@ export const MaternityDuskSection: React.FC = () => {
                 alt="Safeel and Anasma - Dusk Sunset Maternity"
                 className="w-full h-full"
               />
-              <button
-                type="button"
-                onClick={() => setIsUploadOpen(true)}
-                className="absolute top-3 right-3 p-2 rounded-full bg-white/90 border border-[#E8DACB] text-[#8C5835] hover:scale-110 active:scale-95 transition-all shadow-md backdrop-blur-md cursor-pointer flex items-center gap-1 text-[10px] font-montserrat font-medium z-20"
-                title="Change Photo"
-              >
-                <Camera className="w-3.5 h-3.5" />
-                <span>Change</span>
-              </button>
             </div>
           </div>
         </motion.div>

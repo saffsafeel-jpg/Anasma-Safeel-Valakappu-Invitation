@@ -138,20 +138,6 @@ export const ValakappuCoverPage: React.FC<ValakappuCoverPageProps> = ({ onOpenIn
               className="w-full h-full"
             />
 
-            {/* Quick Upload / Camera action badge on top-right of cover photo */}
-            <div className="absolute top-3 right-3 z-20">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsUploadOpen(true);
-                }}
-                className="p-2 rounded-full bg-white/90 border border-[#E8DACB] text-[#8C5835] hover:scale-110 active:scale-95 transition-all shadow-md backdrop-blur-md cursor-pointer"
-                title="Personalize / Upload Cover Photo"
-              >
-                <Camera className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
             {/* Top-left subtle blessing badge */}
             <div className="absolute top-3 left-3 z-20 pointer-events-none">
               <span className="px-2.5 py-1 rounded-full bg-white/90 border border-[#E8DACB] text-[#8C4E3A] font-cinzel text-[9px] uppercase tracking-widest backdrop-blur-md flex items-center gap-1 font-semibold">
@@ -163,7 +149,7 @@ export const ValakappuCoverPage: React.FC<ValakappuCoverPageProps> = ({ onOpenIn
             {/* Bottom Photo Overlay Ribbon with Date & Venue Teaser */}
             <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-[#FAF5EE] via-[#FAF5EE]/95 to-transparent border-t border-[#E8DACB] text-center space-y-1">
               <p className="font-cinzel text-xs font-bold text-[#2E1E14] tracking-widest uppercase">
-                Sunday, 04th October 2026
+                Monday, 05th October 2026
               </p>
               <p className="font-cinzel text-[11px] text-[#5A4234] font-medium tracking-wider">
                 03:00 PM to 06:00 PM

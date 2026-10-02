@@ -24,8 +24,8 @@ export const HeroSilhouetteHeader: React.FC = () => {
     return () => unsub();
   }, []);
 
-  // Event Date: Sunday, 04th October 2026, 03:00 PM IST
-  const targetDate = new Date('2026-10-04T15:00:00+05:30').getTime();
+  // Event Date: Monday, 05th October 2026, 03:00 PM IST
+  const targetDate = new Date('2026-10-05T15:00:00+05:30').getTime();
 
   const [timeLeft, setTimeLeft] = useState<CountdownState>({
     days: 0,
@@ -125,27 +125,17 @@ export const HeroSilhouetteHeader: React.FC = () => {
           />
 
           {/* Top Bar inside photo */}
-          <div className="absolute top-3 inset-x-3 flex items-center justify-between z-20 pointer-events-auto">
+          <div className="absolute top-3 left-3 z-20 pointer-events-none">
             <span className="px-2.5 py-1 rounded-full bg-white/90 border border-[#E8DACB] text-[#8C4E3A] font-cinzel text-[9px] uppercase tracking-widest backdrop-blur-md flex items-center gap-1 font-semibold">
               <Heart className="w-2.5 h-2.5 fill-[#D97D64] text-[#D97D64]" />
               <span>Parents-To-Be</span>
             </span>
-
-            <button
-              type="button"
-              onClick={() => setIsUploadOpen(true)}
-              className="p-2 rounded-full bg-white/90 border border-[#E8DACB] text-[#8C5835] hover:scale-110 active:scale-95 transition-all shadow-md backdrop-blur-md cursor-pointer flex items-center gap-1 text-[10px] font-montserrat font-medium"
-              title="Upload Couple Photo"
-            >
-              <Camera className="w-3.5 h-3.5" />
-              <span>Change Photo</span>
-            </button>
           </div>
 
           {/* Bottom Photo Overlay Ribbon with Sacred Valakappu Kicker */}
           <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-[#FAF5EE] via-[#FAF5EE]/95 to-transparent border-t border-[#E8DACB] text-center space-y-0.5">
             <p className="font-cinzel text-xs font-bold text-[#2E1E14] tracking-widest uppercase">
-              Sunday, 04th October 2026
+              Monday, 05th October 2026
             </p>
             <p className="font-montserrat text-[10px] text-[#8C5835] font-medium tracking-wide">
               03:00 PM to 06:00 PM • Udaya Resort, Palakkad
@@ -199,7 +189,7 @@ export const HeroSilhouetteHeader: React.FC = () => {
         <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-xs">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 border border-[#E8DACB] text-[#5A4234] shadow-sm font-medium">
             <Calendar className="w-3.5 h-3.5 text-[#D97D64]" />
-            <span>04th Oct 2026</span>
+            <span>05th Oct 2026</span>
           </div>
 
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 border border-[#E8DACB] text-[#5A4234] shadow-sm font-medium">

@@ -31,7 +31,7 @@ export const ValakappuVenueDetails: React.FC = () => {
   const handleShare = async () => {
     const shareData = {
       title: 'Valakappu Ceremony - Anasma & Safeel',
-      text: 'You are cordially invited to celebrate the Valakappu Ceremony of Anasma & Safeel on Sunday, 04th October 2026, 03:00 PM to 06:00 PM at Udaya Resort, Palakkad, Kerala.',
+      text: 'You are cordially invited to celebrate the Valakappu Ceremony of Anasma & Safeel on Monday, 05th October 2026, 03:00 PM to 06:00 PM at Udaya Resort, Palakkad, Kerala.',
       url: window.location.href,
     };
 
@@ -52,10 +52,10 @@ export const ValakappuVenueDetails: React.FC = () => {
   };
 
   // Google Calendar URL generator
-  // Date: 2026-10-04 15:00 to 18:00 IST (Palakkad: UTC+5:30 -> UTC: 09:30 to 12:30)
+  // Date: 2026-10-05 15:00 to 18:00 IST (Palakkad: UTC+5:30 -> UTC: 09:30 to 12:30)
   const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
     'Anasma & Safeel - Valakappu Ceremony'
-  )}&dates=20261004T093000Z/20261004T123000Z&details=${encodeURIComponent(
+  )}&dates=20261005T093000Z/20261005T123000Z&details=${encodeURIComponent(
     'Valakappu Ceremony celebrating parents-to-be Anasma & Safeel with traditional bangle rituals, blessings, and dinner feast (03:00 PM to 06:00 PM).'
   )}&location=${encodeURIComponent(`${venueName}, ${venueAddress}`)}`;
 
@@ -98,15 +98,6 @@ export const ValakappuVenueDetails: React.FC = () => {
               alt="Udaya Resort, Palakkad"
               className="w-full h-full"
             />
-            <button
-              type="button"
-              onClick={() => setIsUploadOpen(true)}
-              className="absolute top-3 right-3 p-2 rounded-full bg-white/90 border border-[#E8DACB] text-[#8C5835] hover:scale-110 active:scale-95 transition-all shadow-md backdrop-blur-md cursor-pointer flex items-center gap-1 text-[10px] font-montserrat font-medium z-20"
-              title="Change Venue Photo"
-            >
-              <Camera className="w-3.5 h-3.5" />
-              <span>Change</span>
-            </button>
           </div>
 
           {/* Venue Titles */}
@@ -176,7 +167,7 @@ export const ValakappuVenueDetails: React.FC = () => {
               className="w-full py-2.5 px-4 rounded-xl bg-[#F5E6D8] hover:bg-[#EFE0CE] border border-[#E8CDB5] text-[#8C5835] font-montserrat text-xs font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
             >
               <Calendar className="w-4 h-4 text-[#D97D64]" />
-              <span>Add to Google Calendar (04 Oct 2026)</span>
+              <span>Add to Google Calendar (05 Oct 2026)</span>
             </a>
           </div>
 

@@ -96,7 +96,7 @@ function ValakappuAppContent() {
                   <span>Anasma &amp; Safeel</span>
                 </div>
                 <p className="text-[11px] text-[#6E5448] font-montserrat">
-                  October 04, 2026 • Udaya Resort, Palakkad
+                  Monday, October 05, 2026 • Udaya Resort, Palakkad
                 </p>
 
                 {/* Secret/Discreet Host Dashboard Link */}

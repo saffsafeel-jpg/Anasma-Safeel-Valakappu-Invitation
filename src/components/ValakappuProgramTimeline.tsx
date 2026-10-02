@@ -67,7 +67,7 @@ export const ValakappuProgramTimeline: React.FC = () => {
             Program Timeline
           </h2>
           <p className="font-montserrat text-xs text-[#6E5448] tracking-wider uppercase font-medium">
-            Sunday, 04th October 2026 · 03:00 PM to 06:00 PM
+            Monday, 05th October 2026 · 03:00 PM to 06:00 PM
           </p>
         </div>
 
